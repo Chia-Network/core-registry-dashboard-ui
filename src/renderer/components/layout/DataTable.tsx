@@ -28,6 +28,8 @@ interface DataTableProps {
   order?: string;
   footer?: JSX.Element | null;
   tableHeightOffsetPx?: number;
+  customGlossaryScroll?: boolean;
+  customGlossaryClass?: string;
 }
 
 const DataTable: React.FC<DataTableProps> = ({
@@ -40,6 +42,8 @@ const DataTable: React.FC<DataTableProps> = ({
   order,
   footer = null,
   tableHeightOffsetPx = 0,
+  customGlossaryScroll,
+  customGlossaryClass,
 }) => {
   if (isLoading) {
     return null;
@@ -48,7 +52,7 @@ const DataTable: React.FC<DataTableProps> = ({
   return (
     <div className="dark:bg-gray-800 h-full w-full">
       {/* Mobile view */}
-      <div className="block md:hidden mx-auto w-full">
+      <div className="block md:hidden mx-auto w-full custom-scrollbar">
         {data?.length > 0 &&
           data.map((row) => (
             <div key={row[primaryKey]} className="mb-4 p-4 border border-gray-200 rounded dark:bg-gray-700">
@@ -87,8 +91,13 @@ const DataTable: React.FC<DataTableProps> = ({
         </div>
       ) : null}
       <div
-        className="flex-grow custom-scrollbar"
-        style={{ height: data.length > 0 ? `calc(100vh - ${tableHeightOffsetPx}px)` : 'auto' }}
+        className={`flex-grow custom-scrollbar ${customGlossaryClass}`}
+        // style={{ height: data.length > 0 ? `calc(100vh - ${tableHeightOffsetPx}px)` : 'auto' }}
+        style={
+          customGlossaryScroll
+            ? undefined
+            : { height: data.length > 0 ? `calc(100vh - ${tableHeightOffsetPx}px)` : 'auto' }
+        }
       >
         <SimpleBar style={{ maxHeight: '100%' }} autoHide={false} forceVisible="x">
           <table

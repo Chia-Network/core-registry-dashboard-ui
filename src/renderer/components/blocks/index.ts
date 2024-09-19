@@ -5,3 +5,4 @@ export * from './tables';
 export * from './widgets';
 export * from './forms';
 export * from './tabs';
+export * from './charts';
