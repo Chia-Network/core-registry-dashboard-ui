@@ -1,36 +1,36 @@
 import { cadtApi } from './index';
-import { IssuedCarbonByMethodology } from '@/schemas/IssuedCarbon.schema';
+import { IssuedCarbonByProjectType } from '@/schemas/IssuedCarbon.schema';
 
-interface GetIssuedCarbonByMethodologyParams {
-  methodology?: string;
-  methodologyList?: string[];
+interface GetIssuedCarbonByProjectTypeParams {
+  projectType?: string;
+  projectTypeList?: string[];
   vintageYearRangeStart?: string;
   vintageYearRangeEnd?: string;
   vintageYear?: string;
 }
 
-interface GetIssuedCarbonByMethodologyResponse {
-  data: IssuedCarbonByMethodology;
+interface GetIssuedCarbonByProjectTypeResponse {
+  data: IssuedCarbonByProjectType;
   success: boolean;
 }
 
-const issuedCarbonByMethodology = cadtApi.injectEndpoints({
+const issuedCarbonByProjectType = cadtApi.injectEndpoints({
   endpoints: (builder) => ({
-    getIssuedCarbonByMethodology: builder.query<
-      GetIssuedCarbonByMethodologyResponse,
-      GetIssuedCarbonByMethodologyParams
+    getIssuedCarbonByProjectType: builder.query<
+      GetIssuedCarbonByProjectTypeResponse,
+      GetIssuedCarbonByProjectTypeParams
     >({
       query: ({
-        methodology,
-        methodologyList,
+        projectType,
+        projectTypeList,
         vintageYearRangeStart,
         vintageYearRangeEnd,
         vintageYear,
-      }: GetIssuedCarbonByMethodologyParams) => {
-        const params: GetIssuedCarbonByMethodologyParams = {};
+      }: GetIssuedCarbonByProjectTypeParams) => {
+        const params: GetIssuedCarbonByProjectTypeParams = {};
 
-        if (methodology && methodologyList) {
-          throw new Error('Either methodology or methodologyList must be provided, but not both.');
+        if (projectType && projectTypeList) {
+          throw new Error('Either projectType or projectTypeList must be provided, but not both.');
         }
 
         if ((vintageYearRangeStart && !vintageYearRangeEnd) || (!vintageYearRangeStart && vintageYearRangeEnd)) {
@@ -43,10 +43,10 @@ const issuedCarbonByMethodology = cadtApi.injectEndpoints({
           );
         }
 
-        if (methodology) {
-          params.methodology = methodology;
-        } else if (methodologyList) {
-          params.methodologyList = methodologyList;
+        if (projectType) {
+          params.projectType = projectType;
+        } else if (projectTypeList) {
+          params.projectTypeList = projectTypeList;
         }
 
         if (vintageYear) {
@@ -57,7 +57,7 @@ const issuedCarbonByMethodology = cadtApi.injectEndpoints({
         }
 
         return {
-          url: '/v1/statistics/issuedCarbonByMethodology',
+          url: '/v1/statistics/issuedCarbonByProjectType',
           params: params,
           method: 'GET',
         };
@@ -66,4 +66,4 @@ const issuedCarbonByMethodology = cadtApi.injectEndpoints({
   }),
 });
 
-export const { useGetIssuedCarbonByMethodologyQuery } = issuedCarbonByMethodology;
+export const { useGetIssuedCarbonByProjectTypeQuery } = issuedCarbonByProjectType;

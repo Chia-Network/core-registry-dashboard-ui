@@ -1,6 +1,10 @@
 import React from 'react';
 import { FormattedMessage } from 'react-intl';
-import { useGetIssuedCarbonByMethodologyQuery, useGetProjectsCountQuery } from '@/api';
+import {
+  useGetIssuedCarbonByMethodologyQuery,
+  useGetIssuedCarbonByProjectTypeQuery,
+  useGetProjectsCountQuery,
+} from '@/api';
 import { IndeterminateProgressOverlay, ProjectsView, SkeletonProjectsView, Tabs, UnitsView } from '@/components';
 
 const Dashboard: React.FC = () => {
@@ -12,28 +16,36 @@ const Dashboard: React.FC = () => {
   } = useGetProjectsCountQuery({ status: true });
 
   const {
-    data: IssuedCarbonByMethodologyData,
-    isLoading: IssuedCarbonByMethodologyLoading,
-    isFetching: IssuedCarbonByMethodologyFetching,
-    error: IssuedCarbonByMethodologyError,
+    data: issuedCarbonByMethodologyData,
+    isLoading: issuedCarbonByMethodologyLoading,
+    isFetching: issuedCarbonByMethodologyFetching,
+    error: issuedCarbonByMethodologyError,
   } = useGetIssuedCarbonByMethodologyQuery({});
 
-  if (projectsCountLoading || IssuedCarbonByMethodologyLoading) {
+  const {
+    data: issuedCarbonByProjectTypeData,
+    isLoading: issuedCarbonByProjectTypeLoading,
+    isFetching: issuedCarbonByProjectTypeFetching,
+    error: issuedCarbonByProjectTypeError,
+  } = useGetIssuedCarbonByProjectTypeQuery({});
+
+  if (projectsCountLoading || issuedCarbonByMethodologyLoading || issuedCarbonByProjectTypeLoading) {
     return <SkeletonProjectsView />;
   }
 
-  if (projectsCountError || IssuedCarbonByMethodologyError) {
+  if (projectsCountError || issuedCarbonByMethodologyError || issuedCarbonByProjectTypeError) {
     return <FormattedMessage id={'unable-to-load-contents'} />;
   }
 
-  if (!projectsCountData || !IssuedCarbonByMethodologyData) {
+  if (!projectsCountData || !issuedCarbonByMethodologyData || !issuedCarbonByProjectTypeData) {
     return <FormattedMessage id={'no-records-found'} />;
   }
 
-  console.log('IssuedCarbonByMethodologyData in d', IssuedCarbonByMethodologyData, IssuedCarbonByMethodologyData.data);
   return (
     <>
-      {projectsCountFetching && IssuedCarbonByMethodologyFetching && <IndeterminateProgressOverlay />}
+      {projectsCountFetching && issuedCarbonByMethodologyFetching && issuedCarbonByProjectTypeFetching && (
+        <IndeterminateProgressOverlay />
+      )}
       <Tabs aria-label="Default tabs" className="pt-4">
         <Tabs.Item title={<FormattedMessage id="projects-view" />} id="projects-view">
           {projectsCountLoading ? (
@@ -42,8 +54,10 @@ const Dashboard: React.FC = () => {
             <ProjectsView
               projectsCountData={projectsCountData?.data || []}
               projectsCountIsLoading={projectsCountLoading}
-              issuedCarbonByMethodologyData={IssuedCarbonByMethodologyData?.data || { issuedTonsCo2: [] }}
-              IssuedCarbonByMethodologyLoading={IssuedCarbonByMethodologyLoading}
+              issuedCarbonByMethodologyData={issuedCarbonByMethodologyData?.data || { issuedTonsCo2: [] }}
+              issuedCarbonByMethodologyLoading={issuedCarbonByMethodologyLoading}
+              issuedCarbonByProjectTypeData={issuedCarbonByProjectTypeData?.data || { issuedTonsCo2: [] }}
+              issuedCarbonByProjectTypeLoading={issuedCarbonByProjectTypeLoading}
             />
           )}
         </Tabs.Item>

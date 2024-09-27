@@ -1,4 +1,5 @@
 export interface IssuedTonsCo2 {
-  methodology: string;
+  methodology?: string;
+  projectType?: string;
   tonsCo2: number;
 }

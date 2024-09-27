@@ -1,7 +1,7 @@
 import { BarChart, Card, GlossaryModal } from '@/components';
 import { ProjectsCount } from '@/schemas/ProjectsCount.schema';
 import { useUrlHash } from '@/hooks';
-import { IssuedCarbonByMethodology } from '@/schemas/IssuedCarbonByMethodology.schema';
+import { IssuedCarbonByMethodology, IssuedCarbonByProjectType } from '@/schemas/IssuedCarbon.schema';
 import ChartDataLabels from 'chartjs-plugin-datalabels';
 import { Chart } from 'chart.js';
 
@@ -11,22 +11,12 @@ interface ProjectViewProps {
   projectsCountData: ProjectsCount[];
   projectsCountIsLoading: boolean;
   issuedCarbonByMethodologyData: IssuedCarbonByMethodology;
-  IssuedCarbonByMethodologyLoading: boolean;
+  issuedCarbonByMethodologyLoading: boolean;
+  issuedCarbonByProjectTypeData: IssuedCarbonByProjectType;
+  issuedCarbonByProjectTypeLoading: boolean;
 }
 
-const chartData = {
-  labels: ['Company A', 'Company B', 'Company C'],
-  datasets: [
-    {
-      label: 'Payment Amount',
-      data: [500, 750, 1200],
-      backgroundColor: ['#53D9D9', '#002B49', '#0067A0'],
-      borderWidth: 1,
-    },
-  ],
-};
-
-const chartOptions = {
+const chartOptionsBase = {
   indexAxis: 'y',
   plugins: {
     legend: {
@@ -40,25 +30,28 @@ const chartOptions = {
       clamp: true,
       formatter: (_value, context) => {
         const label = context.chart.data.labels[context.dataIndex];
-        const splitLabel = label.split(':')[0].trim();
-        return `${splitLabel}`;
+        return label?.split(':')[0].trim() || '';
       },
+    },
+    title: {
+      display: true,
+      text: '',
+      font: {
+        size: 18,
+      },
+      position: 'bottom',
     },
   },
   scales: {
     x: {
-      grid: {
-        display: false,
-      },
+      grid: { display: false },
       ticks: {
         color: 'transparent',
         callback: (value, index) => (index === 0 ? value : ''),
       },
     },
     y: {
-      grid: {
-        display: false,
-      },
+      grid: { display: false },
       ticks: {
         color: 'transparent',
         callback: (value, index) => (index === 0 ? value : ''),
@@ -66,45 +59,82 @@ const chartOptions = {
     },
   },
 };
+
 const allowedStatuses = ['Registered', 'Authorized', 'Approved'];
 
 const ProjectsView: React.FC<ProjectViewProps> = ({
   projectsCountData,
   projectsCountIsLoading = false,
   issuedCarbonByMethodologyData,
-  IssuedCarbonByMethodologyLoading = false,
+  issuedCarbonByMethodologyLoading = false,
+  issuedCarbonByProjectTypeData,
+  issuedCarbonByProjectTypeLoading = false,
 }) => {
   const [active, setActive] = useUrlHash('glossary');
 
-  const openModal = () => {
-    setActive(true);
-  };
+  const openModal = () => setActive(true);
 
   const filteredData = projectsCountData.filter((status) => allowedStatuses.includes(status.projectStatus));
 
-  const sortedMethodologies = issuedCarbonByMethodologyData.issuedTonsCo2
-    .filter((item) => item.tonsCo2)
-    .sort((a, b) => (b.tonsCo2 || 0) - (a.tonsCo2 || 0))
-    .slice(0, 3);
-
-  const issuedCarbonByMethodologyChartData = {
-    labels: sortedMethodologies.map((item) => {
-      const truncatedMethodology =
-        item.methodology.length > 35 ? item.methodology.slice(0, 35) + '...' : item.methodology;
-
-      return truncatedMethodology;
-    }),
-    datasets: [
-      {
-        label: 'tonsCo2',
-        data: sortedMethodologies.map((item) => item.tonsCo2),
-        backgroundColor: ['#53D9D9', '#002B49', '#0067A0'],
-        borderWidth: 1,
-      },
-    ],
+  const generateChartData = (data: { projectType?: string; methodology?: string; tonsCo2: number }[]) => {
+    return data
+      .filter((item) => item.tonsCo2 > 0 && (item.methodology || item.projectType))
+      .sort((a, b) => (b.tonsCo2 || 0) - (a.tonsCo2 || 0))
+      .slice(0, 3)
+      .reduce(
+        (acc, item) => {
+          const label = item.methodology || item.projectType;
+          if (label) {
+            acc.labels.push(label.length > 35 ? label.slice(0, 35) + '...' : label);
+            acc.data.push(item.tonsCo2);
+          }
+          return acc;
+        },
+        { labels: [] as string[], data: [] as number[] },
+      );
   };
 
-  if (projectsCountIsLoading || IssuedCarbonByMethodologyLoading) {
+  const createChartData = (issuedData: { issuedTonsCo2: any }) => {
+    const { labels, data } = generateChartData(issuedData.issuedTonsCo2);
+    return {
+      labels,
+      datasets: [
+        {
+          label: 'tonsCo2',
+          data,
+          backgroundColor: ['#53D9D9', '#002B49', '#0067A0'],
+          borderWidth: 1,
+        },
+      ],
+    };
+  };
+
+  const charts = [
+    {
+      data: createChartData(issuedCarbonByMethodologyData),
+      title: 'Issued Carbon by Methodology',
+    },
+    {
+      data: createChartData(issuedCarbonByProjectTypeData),
+      title: 'Issued Carbon by Project Type',
+    },
+    {
+      data: {
+        labels: ['Company A', 'Company B', 'Company C'],
+        datasets: [
+          {
+            label: 'Payment Amount',
+            data: [500, 750, 1200],
+            backgroundColor: ['#53D9D9', '#002B49', '#0067A0'],
+            borderWidth: 1,
+          },
+        ],
+      },
+      title: 'Sample Graph',
+    },
+  ];
+
+  if (projectsCountIsLoading || issuedCarbonByMethodologyLoading || issuedCarbonByProjectTypeLoading) {
     return null;
   }
 
@@ -135,17 +165,27 @@ const ProjectsView: React.FC<ProjectViewProps> = ({
         ))}
         <GlossaryModal onClose={() => setActive(false)} open={active} />
       </div>
-      {/* This is sample graph. Update it with the actual data */}
       <div className="grid grid-cols-1 gap-4 md:grid-cols-3">
-        <div className="flex items-center p-4 bg-white border border-gray-200 rounded-lg shadow-md dark:border-gray-700 dark:bg-gray-800">
-          <BarChart data={issuedCarbonByMethodologyChartData} options={chartOptions} />
-        </div>
-        <div className="flex items-center p-4 bg-white border border-gray-200 rounded-lg shadow-md dark:border-gray-700 dark:bg-gray-800">
-          <BarChart data={chartData} options={chartOptions} />
-        </div>
-        <div className="flex items-center p-4 bg-white border border-gray-200 rounded-lg shadow-md dark:border-gray-700 dark:bg-gray-800">
-          <BarChart data={chartData} options={chartOptions} />
-        </div>
+        {charts.map(({ data, title }, index) => (
+          <div
+            key={index}
+            className="flex items-center p-4 bg-white border border-gray-200 rounded-lg shadow-md dark:border-gray-700 dark:bg-gray-800"
+          >
+            <BarChart
+              data={data}
+              options={{
+                ...chartOptionsBase,
+                plugins: {
+                  ...chartOptionsBase.plugins,
+                  title: {
+                    ...chartOptionsBase.plugins.title,
+                    text: title,
+                  },
+                },
+              }}
+            />
+          </div>
+        ))}
       </div>
     </div>
   );
