@@ -1,10 +1,17 @@
 import { BarChart, Card, GlossaryModal } from '@/components';
 import { ProjectsCount } from '@/schemas/ProjectsCount.schema';
 import { useUrlHash } from '@/hooks';
+import { IssuedCarbonByMethodology } from '@/schemas/IssuedCarbonByMethodology.schema';
+import ChartDataLabels from 'chartjs-plugin-datalabels';
+import { Chart } from 'chart.js';
+
+Chart.register(ChartDataLabels);
 
 interface ProjectViewProps {
-  data: ProjectsCount[];
-  isLoading: boolean;
+  projectsCountData: ProjectsCount[];
+  projectsCountIsLoading: boolean;
+  issuedCarbonByMethodologyData: IssuedCarbonByMethodology;
+  IssuedCarbonByMethodologyLoading: boolean;
 }
 
 const chartData = {
@@ -23,23 +30,81 @@ const chartOptions = {
   indexAxis: 'y',
   plugins: {
     legend: {
-      display: true,
+      display: false,
+    },
+    responsive: true,
+    datalabels: {
+      color: '#fff',
+      anchor: 'end',
+      align: 'start',
+      clamp: true,
+      formatter: (_value, context) => {
+        const label = context.chart.data.labels[context.dataIndex];
+        const splitLabel = label.split(':')[0].trim();
+        return `${splitLabel}`;
+      },
+    },
+  },
+  scales: {
+    x: {
+      grid: {
+        display: false,
+      },
+      ticks: {
+        color: 'transparent',
+        callback: (value, index) => (index === 0 ? value : ''),
+      },
+    },
+    y: {
+      grid: {
+        display: false,
+      },
+      ticks: {
+        color: 'transparent',
+        callback: (value, index) => (index === 0 ? value : ''),
+      },
     },
   },
 };
-
 const allowedStatuses = ['Registered', 'Authorized', 'Approved'];
 
-const ProjectsView: React.FC<ProjectViewProps> = ({ data, isLoading = false }) => {
+const ProjectsView: React.FC<ProjectViewProps> = ({
+  projectsCountData,
+  projectsCountIsLoading = false,
+  issuedCarbonByMethodologyData,
+  IssuedCarbonByMethodologyLoading = false,
+}) => {
   const [active, setActive] = useUrlHash('glossary');
 
   const openModal = () => {
     setActive(true);
   };
 
-  const filteredData = data.filter((status) => allowedStatuses.includes(status.projectStatus));
+  const filteredData = projectsCountData.filter((status) => allowedStatuses.includes(status.projectStatus));
 
-  if (isLoading) {
+  const sortedMethodologies = issuedCarbonByMethodologyData.issuedTonsCo2
+    .filter((item) => item.tonsCo2)
+    .sort((a, b) => (b.tonsCo2 || 0) - (a.tonsCo2 || 0))
+    .slice(0, 3);
+
+  const issuedCarbonByMethodologyChartData = {
+    labels: sortedMethodologies.map((item) => {
+      const truncatedMethodology =
+        item.methodology.length > 35 ? item.methodology.slice(0, 35) + '...' : item.methodology;
+
+      return truncatedMethodology;
+    }),
+    datasets: [
+      {
+        label: 'tonsCo2',
+        data: sortedMethodologies.map((item) => item.tonsCo2),
+        backgroundColor: ['#53D9D9', '#002B49', '#0067A0'],
+        borderWidth: 1,
+      },
+    ],
+  };
+
+  if (projectsCountIsLoading || IssuedCarbonByMethodologyLoading) {
     return null;
   }
 
@@ -72,16 +137,13 @@ const ProjectsView: React.FC<ProjectViewProps> = ({ data, isLoading = false }) =
       </div>
       {/* This is sample graph. Update it with the actual data */}
       <div className="grid grid-cols-1 gap-4 md:grid-cols-3">
-        <div className="p-4 bg-white rounded shadow">
-          <h4 className="mb-4 text-xl font-bold">Chart 1</h4>
+        <div className="flex items-center p-4 bg-white border border-gray-200 rounded-lg shadow-md dark:border-gray-700 dark:bg-gray-800">
+          <BarChart data={issuedCarbonByMethodologyChartData} options={chartOptions} />
+        </div>
+        <div className="flex items-center p-4 bg-white border border-gray-200 rounded-lg shadow-md dark:border-gray-700 dark:bg-gray-800">
           <BarChart data={chartData} options={chartOptions} />
         </div>
-        <div className="p-4 bg-white rounded shadow">
-          <h4 className="mb-4 text-xl font-bold">Chart 2</h4>
-          <BarChart data={chartData} options={chartOptions} />
-        </div>
-        <div className="p-4 bg-white rounded shadow">
-          <h4 className="mb-4 text-xl font-bold">Chart 3</h4>
+        <div className="flex items-center p-4 bg-white border border-gray-200 rounded-lg shadow-md dark:border-gray-700 dark:bg-gray-800">
           <BarChart data={chartData} options={chartOptions} />
         </div>
       </div>

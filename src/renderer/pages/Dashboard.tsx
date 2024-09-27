@@ -1,6 +1,6 @@
 import React from 'react';
-import { useGetProjectsCountQuery } from '@/api';
 import { FormattedMessage } from 'react-intl';
+import { useGetIssuedCarbonByMethodologyQuery, useGetProjectsCountQuery } from '@/api';
 import { IndeterminateProgressOverlay, ProjectsView, SkeletonProjectsView, Tabs, UnitsView } from '@/components';
 
 const Dashboard: React.FC = () => {
@@ -11,27 +11,40 @@ const Dashboard: React.FC = () => {
     error: projectsCountError,
   } = useGetProjectsCountQuery({ status: true });
 
-  if (projectsCountLoading) {
+  const {
+    data: IssuedCarbonByMethodologyData,
+    isLoading: IssuedCarbonByMethodologyLoading,
+    isFetching: IssuedCarbonByMethodologyFetching,
+    error: IssuedCarbonByMethodologyError,
+  } = useGetIssuedCarbonByMethodologyQuery({});
+
+  if (projectsCountLoading || IssuedCarbonByMethodologyLoading) {
     return <SkeletonProjectsView />;
   }
 
-  if (projectsCountError) {
+  if (projectsCountError || IssuedCarbonByMethodologyError) {
     return <FormattedMessage id={'unable-to-load-contents'} />;
   }
 
-  if (!projectsCountData) {
+  if (!projectsCountData || !IssuedCarbonByMethodologyData) {
     return <FormattedMessage id={'no-records-found'} />;
   }
 
+  console.log('IssuedCarbonByMethodologyData in d', IssuedCarbonByMethodologyData, IssuedCarbonByMethodologyData.data);
   return (
     <>
-      {projectsCountFetching && <IndeterminateProgressOverlay />}
+      {projectsCountFetching && IssuedCarbonByMethodologyFetching && <IndeterminateProgressOverlay />}
       <Tabs aria-label="Default tabs" className="pt-4">
         <Tabs.Item title={<FormattedMessage id="projects-view" />} id="projects-view">
           {projectsCountLoading ? (
             <SkeletonProjectsView />
           ) : (
-            <ProjectsView data={projectsCountData?.data || []} isLoading={projectsCountLoading} />
+            <ProjectsView
+              projectsCountData={projectsCountData?.data || []}
+              projectsCountIsLoading={projectsCountLoading}
+              issuedCarbonByMethodologyData={IssuedCarbonByMethodologyData?.data || { issuedTonsCo2: [] }}
+              IssuedCarbonByMethodologyLoading={IssuedCarbonByMethodologyLoading}
+            />
           )}
         </Tabs.Item>
 
