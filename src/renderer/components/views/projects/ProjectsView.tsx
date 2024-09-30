@@ -1,22 +1,25 @@
-import { BarChart, Card, GlossaryModal } from '@/components';
-import { ProjectsCount } from '@/schemas/ProjectsCount.schema';
+import { BarChart, Card, GlossaryModal, PieChart } from '@/components';
+import { ProjectsStatusCount } from '@/schemas/ProjectsStatusCount.schema';
 import { useUrlHash } from '@/hooks';
 import { IssuedCarbonByMethodology, IssuedCarbonByProjectType } from '@/schemas/IssuedCarbon.schema';
 import ChartDataLabels from 'chartjs-plugin-datalabels';
 import { Chart } from 'chart.js';
+import { ProjectsHostedCount } from '@/schemas/ProjectsHostedCount.schema';
 
 Chart.register(ChartDataLabels);
 
 interface ProjectViewProps {
-  projectsCountData: ProjectsCount[];
-  projectsCountIsLoading: boolean;
+  projectsStatusCountData: ProjectsStatusCount[];
+  projectsStatusCountLoading: boolean;
+  projectsHostedCountData: ProjectsHostedCount;
+  projectsHostedCountLoading: boolean;
   issuedCarbonByMethodologyData: IssuedCarbonByMethodology;
   issuedCarbonByMethodologyLoading: boolean;
   issuedCarbonByProjectTypeData: IssuedCarbonByProjectType;
   issuedCarbonByProjectTypeLoading: boolean;
 }
 
-const chartOptionsBase = {
+const barChartOptionsBase = {
   indexAxis: 'y',
   plugins: {
     legend: {
@@ -60,11 +63,31 @@ const chartOptionsBase = {
   },
 };
 
+const pieChartOptionsBase = {
+  plugins: {
+    legend: {
+      display: true,
+    },
+    responsive: true,
+    datalabels: {
+      color: 'white',
+      formatter: () => '',
+    },
+  },
+};
+
+const COLORS = {
+  BAR: ['#53D9D9', '#002B49', '#0067A0'],
+  PIE: ['#53D9D9', '#002B49'],
+};
+
 const allowedStatuses = ['Registered', 'Authorized', 'Approved'];
 
 const ProjectsView: React.FC<ProjectViewProps> = ({
-  projectsCountData,
-  projectsCountIsLoading = false,
+  projectsStatusCountData,
+  projectsStatusCountLoading = false,
+  projectsHostedCountData,
+  projectsHostedCountLoading = false,
   issuedCarbonByMethodologyData,
   issuedCarbonByMethodologyLoading = false,
   issuedCarbonByProjectTypeData,
@@ -74,67 +97,65 @@ const ProjectsView: React.FC<ProjectViewProps> = ({
 
   const openModal = () => setActive(true);
 
-  const filteredData = projectsCountData.filter((status) => allowedStatuses.includes(status.projectStatus));
+  const filteredData = projectsStatusCountData.filter((status) => allowedStatuses.includes(status.projectStatus));
 
-  const generateChartData = (data: { projectType?: string; methodology?: string; tonsCo2: number }[]) => {
-    return data
+  const generateBarChartData = (data: { projectType?: string; methodology?: string; tonsCo2: number }[]) => {
+    const filtered = data
       .filter((item) => item.tonsCo2 > 0 && (item.methodology || item.projectType))
       .sort((a, b) => (b.tonsCo2 || 0) - (a.tonsCo2 || 0))
-      .slice(0, 3)
-      .reduce(
-        (acc, item) => {
-          const label = item.methodology || item.projectType;
-          if (label) {
-            acc.labels.push(label.length > 35 ? label.slice(0, 35) + '...' : label);
-            acc.data.push(item.tonsCo2);
-          }
-          return acc;
-        },
-        { labels: [] as string[], data: [] as number[] },
-      );
-  };
+      .slice(0, 3);
 
-  const createChartData = (issuedData: { issuedTonsCo2: any }) => {
-    const { labels, data } = generateChartData(issuedData.issuedTonsCo2);
-    return {
-      labels,
-      datasets: [
-        {
-          label: 'tonsCo2',
-          data,
-          backgroundColor: ['#53D9D9', '#002B49', '#0067A0'],
-          borderWidth: 1,
-        },
-      ],
-    };
+    const labels = filtered.map((item) => {
+      const label = item.methodology || item.projectType;
+      return label ? (label.length > 35 ? label.slice(0, 35) + '...' : label) : '';
+    });
+
+    const chartData = filtered.map((item) => item.tonsCo2);
+
+    return createChartData(labels, chartData, 'tonsCo2', COLORS.BAR);
   };
+  const selfHostedCount = projectsHostedCountData.selfHostedProjectCount;
+  const externallyHostedCount = projectsHostedCountData.externallyHostedProjectCount;
+
+  const createChartData = (labels: string[], data: number[], label: string, backgroundColor: string[]) => ({
+    labels,
+    datasets: [
+      {
+        label,
+        data,
+        backgroundColor,
+        borderWidth: 1,
+      },
+    ],
+  });
 
   const charts = [
     {
-      data: createChartData(issuedCarbonByMethodologyData),
+      data: generateBarChartData(issuedCarbonByMethodologyData.issuedTonsCo2),
       title: 'Issued Carbon by Methodology',
+      type: 'bar',
     },
     {
-      data: createChartData(issuedCarbonByProjectTypeData),
+      data: generateBarChartData(issuedCarbonByProjectTypeData.issuedTonsCo2),
       title: 'Issued Carbon by Project Type',
+      type: 'bar',
     },
     {
-      data: {
-        labels: ['Company A', 'Company B', 'Company C'],
-        datasets: [
-          {
-            label: 'Payment Amount',
-            data: [500, 750, 1200],
-            backgroundColor: ['#53D9D9', '#002B49', '#0067A0'],
-            borderWidth: 1,
-          },
-        ],
-      },
-      title: 'Sample Graph',
+      data: createChartData(
+        ['Externally Hosted Projects', 'Self Hosted Projects'],
+        [externallyHostedCount, selfHostedCount],
+        'Count',
+        COLORS.PIE,
+      ),
+      type: 'pie',
     },
   ];
-
-  if (projectsCountIsLoading || issuedCarbonByMethodologyLoading || issuedCarbonByProjectTypeLoading) {
+  if (
+    projectsStatusCountLoading ||
+    projectsHostedCountLoading ||
+    issuedCarbonByMethodologyLoading ||
+    issuedCarbonByProjectTypeLoading
+  ) {
     return null;
   }
 
@@ -154,7 +175,7 @@ const ProjectsView: React.FC<ProjectViewProps> = ({
                       ? 'text-lime-500 text-left dark:text-green-400'
                       : status.projectStatus.toLowerCase() === 'authorized'
                         ? 'text-left text-sky-400 dark:text-blue-500'
-                        : 'text-gray-900 dark:text-white'
+                        : 'text-sky-800 dark:text-white'
                   } underline`}
                 >
                   Projects {status.projectStatus}
@@ -166,24 +187,39 @@ const ProjectsView: React.FC<ProjectViewProps> = ({
         <GlossaryModal onClose={() => setActive(false)} open={active} />
       </div>
       <div className="grid grid-cols-1 gap-4 md:grid-cols-3">
-        {charts.map(({ data, title }, index) => (
+        {charts.map(({ data, title, type }, index) => (
           <div
             key={index}
-            className="flex items-center p-4 bg-white border border-gray-200 rounded-lg shadow-md dark:border-gray-700 dark:bg-gray-800"
+            className="flex items-center justify-center max-h-[450px] p-4 bg-white border border-gray-200 rounded-lg shadow-md dark:border-gray-700 dark:bg-gray-800"
           >
-            <BarChart
-              data={data}
-              options={{
-                ...chartOptionsBase,
-                plugins: {
-                  ...chartOptionsBase.plugins,
-                  title: {
-                    ...chartOptionsBase.plugins.title,
-                    text: title,
+            {type === 'bar' ? (
+              <BarChart
+                data={data}
+                options={{
+                  ...barChartOptionsBase,
+                  plugins: {
+                    ...barChartOptionsBase.plugins,
+                    title: {
+                      ...barChartOptionsBase.plugins.title,
+                      text: title,
+                    },
                   },
-                },
-              }}
-            />
+                }}
+              />
+            ) : (
+              <PieChart
+                data={data}
+                options={{
+                  ...pieChartOptionsBase,
+                  plugins: {
+                    ...pieChartOptionsBase.plugins,
+                    title: {
+                      display: false,
+                    },
+                  },
+                }}
+              />
+            )}
           </div>
         ))}
       </div>

@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useMemo } from 'react';
 import { FormattedMessage } from 'react-intl';
 import {
   useGetIssuedCarbonByMethodologyQuery,
@@ -6,57 +6,98 @@ import {
   useGetProjectsCountQuery,
 } from '@/api';
 import { IndeterminateProgressOverlay, ProjectsView, SkeletonProjectsView, Tabs, UnitsView } from '@/components';
+import { useQueryParamState } from '@/hooks';
+import { ProjectsStatusCount } from '@/schemas/ProjectsStatusCount.schema';
+import { ProjectsHostedCount } from '@/schemas/ProjectsHostedCount.schema';
 
 const Dashboard: React.FC = () => {
+  const [status /* set func here */] = useQueryParamState('status', 'true');
+  const [hostRegistry /* set func here */] = useQueryParamState('hostRegistry', 'true');
+
   const {
-    data: projectsCountData,
-    isLoading: projectsCountLoading,
-    isFetching: projectsCountFetching,
-    error: projectsCountError,
-  } = useGetProjectsCountQuery({ status: true });
+    data: projectsStatusCountData,
+    isLoading: projectsStatusCountLoading,
+    error: projectsStatusCountError,
+  } = useGetProjectsCountQuery({
+    status: status ? Boolean(status) : undefined,
+  });
+
+  const {
+    data: projectsHostedCountData,
+    isLoading: projectsHostedCountLoading,
+    error: projectsHostedCountError,
+  } = useGetProjectsCountQuery({
+    hostRegistry: hostRegistry ? Boolean(hostRegistry) : undefined,
+  });
 
   const {
     data: issuedCarbonByMethodologyData,
     isLoading: issuedCarbonByMethodologyLoading,
-    isFetching: issuedCarbonByMethodologyFetching,
     error: issuedCarbonByMethodologyError,
   } = useGetIssuedCarbonByMethodologyQuery({});
 
   const {
     data: issuedCarbonByProjectTypeData,
     isLoading: issuedCarbonByProjectTypeLoading,
-    isFetching: issuedCarbonByProjectTypeFetching,
     error: issuedCarbonByProjectTypeError,
   } = useGetIssuedCarbonByProjectTypeQuery({});
 
-  if (projectsCountLoading || issuedCarbonByMethodologyLoading || issuedCarbonByProjectTypeLoading) {
+  const contentsLoading = useMemo<boolean>(() => {
+    return (
+      projectsStatusCountLoading ||
+      projectsHostedCountLoading ||
+      issuedCarbonByMethodologyLoading ||
+      issuedCarbonByProjectTypeLoading
+    );
+  }, [
+    projectsStatusCountLoading,
+    projectsHostedCountLoading,
+    issuedCarbonByMethodologyLoading,
+    issuedCarbonByProjectTypeLoading,
+  ]);
+
+  if (contentsLoading) {
     return <SkeletonProjectsView />;
   }
 
-  if (projectsCountError || issuedCarbonByMethodologyError || issuedCarbonByProjectTypeError) {
+  if (
+    projectsStatusCountError ||
+    projectsHostedCountError ||
+    issuedCarbonByMethodologyError ||
+    issuedCarbonByProjectTypeError
+  ) {
     return <FormattedMessage id={'unable-to-load-contents'} />;
   }
 
-  if (!projectsCountData || !issuedCarbonByMethodologyData || !issuedCarbonByProjectTypeData) {
+  if (
+    !projectsStatusCountData &&
+    !projectsHostedCountData &&
+    !issuedCarbonByMethodologyData &&
+    !issuedCarbonByProjectTypeData
+  ) {
     return <FormattedMessage id={'no-records-found'} />;
   }
 
   return (
     <>
-      {projectsCountFetching && issuedCarbonByMethodologyFetching && issuedCarbonByProjectTypeFetching && (
-        <IndeterminateProgressOverlay />
-      )}
+      {contentsLoading && <IndeterminateProgressOverlay />}
       <Tabs aria-label="Default tabs" className="pt-4">
         <Tabs.Item title={<FormattedMessage id="projects-view" />} id="projects-view">
-          {projectsCountLoading ? (
+          {contentsLoading ? (
             <SkeletonProjectsView />
           ) : (
             <ProjectsView
-              projectsCountData={projectsCountData?.data || []}
-              projectsCountIsLoading={projectsCountLoading}
-              issuedCarbonByMethodologyData={issuedCarbonByMethodologyData?.data || { issuedTonsCo2: [] }}
+              projectsStatusCountData={(projectsStatusCountData?.data as ProjectsStatusCount[]) || []}
+              projectsStatusCountLoading={projectsStatusCountLoading}
+              projectsHostedCountData={projectsHostedCountData?.data as ProjectsHostedCount}
+              projectsHostedCountLoading={projectsHostedCountLoading}
+              issuedCarbonByMethodologyData={
+                issuedCarbonByMethodologyData?.data || { issuedTonsCo2: [], context: 'Methodology' }
+              }
               issuedCarbonByMethodologyLoading={issuedCarbonByMethodologyLoading}
-              issuedCarbonByProjectTypeData={issuedCarbonByProjectTypeData?.data || { issuedTonsCo2: [] }}
+              issuedCarbonByProjectTypeData={
+                issuedCarbonByProjectTypeData?.data || { issuedTonsCo2: [], context: 'ProjectType' }
+              }
               issuedCarbonByProjectTypeLoading={issuedCarbonByProjectTypeLoading}
             />
           )}
