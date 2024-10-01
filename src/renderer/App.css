@@ -57,3 +57,7 @@
   overflow-y: auto;
   overflow-x: hidden;
 }
+
+.sentence-case::first-letter {
+    text-transform: uppercase
+}
