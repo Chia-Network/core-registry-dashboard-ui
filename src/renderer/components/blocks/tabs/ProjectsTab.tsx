@@ -8,7 +8,7 @@ import { ProjectsHostedCount } from '@/schemas/ProjectsHostedCount.schema';
 
 Chart.register(ChartDataLabels);
 
-interface ProjectViewProps {
+interface ProjectTabProps {
   projectsStatusCountData: ProjectsStatusCount[];
   projectsStatusCountLoading: boolean;
   projectsHostedCountData: ProjectsHostedCount;
@@ -83,7 +83,7 @@ const COLORS = {
 
 const allowedStatuses = ['Registered', 'Authorized', 'Approved'];
 
-const ProjectsView: React.FC<ProjectViewProps> = ({
+const ProjectsTab: React.FC<ProjectTabProps> = ({
   projectsStatusCountData,
   projectsStatusCountLoading = false,
   projectsHostedCountData,
@@ -188,10 +188,7 @@ const ProjectsView: React.FC<ProjectViewProps> = ({
       </div>
       <div className="grid grid-cols-1 gap-4 md:grid-cols-3">
         {charts.map(({ data, title, type }, index) => (
-          <div
-            key={index}
-            className="flex items-center justify-center max-h-[450px] p-4 bg-white border border-gray-200 rounded-lg shadow-md dark:border-gray-700 dark:bg-gray-800"
-          >
+          <Card key={index} className="justify-center max-h-[450px]">
             {type === 'bar' ? (
               <BarChart
                 data={data}
@@ -220,11 +217,11 @@ const ProjectsView: React.FC<ProjectViewProps> = ({
                 }}
               />
             )}
-          </div>
+          </Card>
         ))}
       </div>
     </div>
   );
 };
 
-export { ProjectsView };
+export { ProjectsTab };

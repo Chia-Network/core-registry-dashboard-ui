@@ -5,7 +5,7 @@ const renderSkeletonBars = (count: number) => {
   return Array.from({ length: count }, (_, index) => <SkeletonBar key={index} />);
 };
 
-const SkeletonProjectsView: React.FC = () => {
+const CardSkeleton: React.FC = () => {
   const data = useMemo(() => Array.from({ length: 3 }, (_, index) => index + 1), []);
 
   return (
@@ -17,4 +17,4 @@ const SkeletonProjectsView: React.FC = () => {
   );
 };
 
-export { SkeletonProjectsView };
+export { CardSkeleton };

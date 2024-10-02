@@ -5,7 +5,7 @@ import {
   useGetIssuedCarbonByProjectTypeQuery,
   useGetProjectsCountQuery,
 } from '@/api';
-import { IndeterminateProgressOverlay, ProjectsView, SkeletonProjectsView, Tabs, UnitsView } from '@/components';
+import { CardSkeleton, IndeterminateProgressOverlay, ProjectsTab, Tabs, UnitsTab } from '@/components';
 import { useQueryParamState } from '@/hooks';
 import { ProjectsStatusCount } from '@/schemas/ProjectsStatusCount.schema';
 import { ProjectsHostedCount } from '@/schemas/ProjectsHostedCount.schema';
@@ -57,7 +57,7 @@ const Dashboard: React.FC = () => {
   ]);
 
   if (contentsLoading) {
-    return <SkeletonProjectsView />;
+    return <CardSkeleton />;
   }
 
   if (
@@ -84,9 +84,9 @@ const Dashboard: React.FC = () => {
       <Tabs aria-label="Default tabs" className="pt-4">
         <Tabs.Item title={<FormattedMessage id="projects-view" />} id="projects-view">
           {contentsLoading ? (
-            <SkeletonProjectsView />
+            <CardSkeleton />
           ) : (
-            <ProjectsView
+            <ProjectsTab
               projectsStatusCountData={(projectsStatusCountData?.data as ProjectsStatusCount[]) || []}
               projectsStatusCountLoading={projectsStatusCountLoading}
               projectsHostedCountData={projectsHostedCountData?.data as ProjectsHostedCount}
@@ -105,7 +105,7 @@ const Dashboard: React.FC = () => {
 
         <Tabs.Item title={<FormattedMessage id="units-view" />} id="units-view">
           <div className="p-4">
-            <UnitsView />
+            <UnitsTab />
           </div>
         </Tabs.Item>
       </Tabs>
