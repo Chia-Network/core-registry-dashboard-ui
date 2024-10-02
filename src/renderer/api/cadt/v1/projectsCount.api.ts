@@ -44,6 +44,7 @@ const projectsCountApi = cadtApi.injectEndpoints({
           method: 'GET',
         };
       },
+      keepUnusedDataFor: 600,
     }),
   }),
 });

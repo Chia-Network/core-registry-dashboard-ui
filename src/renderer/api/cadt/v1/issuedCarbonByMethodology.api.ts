@@ -62,6 +62,7 @@ const issuedCarbonByMethodology = cadtApi.injectEndpoints({
           method: 'GET',
         };
       },
+      keepUnusedDataFor: 600,
     }),
   }),
 });

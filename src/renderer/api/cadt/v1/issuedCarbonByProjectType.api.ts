@@ -62,6 +62,7 @@ const issuedCarbonByProjectType = cadtApi.injectEndpoints({
           method: 'GET',
         };
       },
+      keepUnusedDataFor: 600,
     }),
   }),
 });
