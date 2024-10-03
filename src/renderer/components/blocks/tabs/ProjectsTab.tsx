@@ -1,5 +1,12 @@
-import { BarChart, Card, GlossaryModal, PieChart } from '@/components';
-import { ProjectsStatusCount } from '@/schemas/ProjectsStatusCount.schema';
+import {
+  ApprovedProjectsCard,
+  AuthorizedProjectsCard,
+  BarChart,
+  Card,
+  GlossaryModal,
+  PieChart,
+  RegisteredProjectsCard,
+} from '@/components';
 import { useUrlHash } from '@/hooks';
 import { IssuedCarbonByMethodology, IssuedCarbonByProjectType } from '@/schemas/IssuedCarbon.schema';
 import ChartDataLabels from 'chartjs-plugin-datalabels';
@@ -9,8 +16,6 @@ import { ProjectsHostedCount } from '@/schemas/ProjectsHostedCount.schema';
 Chart.register(ChartDataLabels);
 
 interface ProjectTabProps {
-  projectsStatusCountData: ProjectsStatusCount[];
-  projectsStatusCountLoading: boolean;
   projectsHostedCountData: ProjectsHostedCount;
   projectsHostedCountLoading: boolean;
   issuedCarbonByMethodologyData: IssuedCarbonByMethodology;
@@ -81,11 +86,7 @@ const COLORS = {
   PIE: ['#53D9D9', '#002B49'],
 };
 
-const allowedStatuses = ['Registered', 'Authorized', 'Approved'];
-
 const ProjectsTab: React.FC<ProjectTabProps> = ({
-  projectsStatusCountData,
-  projectsStatusCountLoading = false,
   projectsHostedCountData,
   projectsHostedCountLoading = false,
   issuedCarbonByMethodologyData,
@@ -96,8 +97,6 @@ const ProjectsTab: React.FC<ProjectTabProps> = ({
   const [active, setActive] = useUrlHash('glossary');
 
   const openModal = () => setActive(true);
-
-  const filteredData = projectsStatusCountData.filter((status) => allowedStatuses.includes(status.projectStatus));
 
   const generateBarChartData = (data: { projectType?: string; methodology?: string; tonsCo2: number }[]) => {
     const filtered = data
@@ -150,40 +149,16 @@ const ProjectsTab: React.FC<ProjectTabProps> = ({
       type: 'pie',
     },
   ];
-  if (
-    projectsStatusCountLoading ||
-    projectsHostedCountLoading ||
-    issuedCarbonByMethodologyLoading ||
-    issuedCarbonByProjectTypeLoading
-  ) {
+  if (projectsHostedCountLoading || issuedCarbonByMethodologyLoading || issuedCarbonByProjectTypeLoading) {
     return null;
   }
 
   return (
     <div className="flex flex-col gap-16 m-4">
       <div className="grid grid-cols-1 gap-4 md:grid-cols-3">
-        {filteredData?.map((status) => (
-          <Card key={status.projectStatus}>
-            <div className="flex flex-col gap-4 p-4 text-center">
-              <h3 className="text-7xl bold">{status.count}</h3>
-              <h4 className="text-lg font-semibold">
-                <a
-                  href="#glossary"
-                  onClick={() => openModal()}
-                  className={`${
-                    status.projectStatus.toLowerCase() === 'approved'
-                      ? 'text-lime-500 text-left dark:text-green-400'
-                      : status.projectStatus.toLowerCase() === 'authorized'
-                        ? 'text-left text-sky-400 dark:text-blue-500'
-                        : 'text-sky-800 dark:text-white'
-                  } underline`}
-                >
-                  Projects {status.projectStatus}
-                </a>
-              </h4>
-            </div>
-          </Card>
-        ))}
+        <RegisteredProjectsCard onGlossaryClick={() => openModal()} />
+        <AuthorizedProjectsCard onGlossaryClick={() => openModal()} />
+        <ApprovedProjectsCard onGlossaryClick={() => openModal()} />
         <GlossaryModal onClose={() => setActive(false)} open={active} />
       </div>
       <div className="grid grid-cols-1 gap-4 md:grid-cols-3">

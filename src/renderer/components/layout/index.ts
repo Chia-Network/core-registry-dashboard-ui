@@ -3,4 +3,4 @@ export * from './DataTable';
 export * from './IndeterminateProgressOverlay';
 export * from './Header';
 export * from './ComponentCenteredSpinner';
-export * from './CardSkeleton';
+export * from './SkeletonCard';

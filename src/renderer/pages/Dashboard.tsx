@@ -5,22 +5,12 @@ import {
   useGetIssuedCarbonByProjectTypeQuery,
   useGetProjectsCountQuery,
 } from '@/api';
-import { CardSkeleton, IndeterminateProgressOverlay, ProjectsTab, Tabs, UnitsTab } from '@/components';
+import { SkeletonCard, IndeterminateProgressOverlay, ProjectsTab, Tabs, UnitsTab } from '@/components';
 import { useQueryParamState } from '@/hooks';
-import { ProjectsStatusCount } from '@/schemas/ProjectsStatusCount.schema';
 import { ProjectsHostedCount } from '@/schemas/ProjectsHostedCount.schema';
 
 const Dashboard: React.FC = () => {
-  const [status /* set func here */] = useQueryParamState('status', 'true');
   const [hostRegistry /* set func here */] = useQueryParamState('hostRegistry', 'true');
-
-  const {
-    data: projectsStatusCountData,
-    isLoading: projectsStatusCountLoading,
-    error: projectsStatusCountError,
-  } = useGetProjectsCountQuery({
-    status: status ? Boolean(status) : undefined,
-  });
 
   const {
     data: projectsHostedCountData,
@@ -43,38 +33,18 @@ const Dashboard: React.FC = () => {
   } = useGetIssuedCarbonByProjectTypeQuery({});
 
   const contentsLoading = useMemo<boolean>(() => {
-    return (
-      projectsStatusCountLoading ||
-      projectsHostedCountLoading ||
-      issuedCarbonByMethodologyLoading ||
-      issuedCarbonByProjectTypeLoading
-    );
-  }, [
-    projectsStatusCountLoading,
-    projectsHostedCountLoading,
-    issuedCarbonByMethodologyLoading,
-    issuedCarbonByProjectTypeLoading,
-  ]);
+    return projectsHostedCountLoading || issuedCarbonByMethodologyLoading || issuedCarbonByProjectTypeLoading;
+  }, [projectsHostedCountLoading, issuedCarbonByMethodologyLoading, issuedCarbonByProjectTypeLoading]);
 
   if (contentsLoading) {
-    return <CardSkeleton />;
+    return <SkeletonCard />;
   }
 
-  if (
-    projectsStatusCountError ||
-    projectsHostedCountError ||
-    issuedCarbonByMethodologyError ||
-    issuedCarbonByProjectTypeError
-  ) {
+  if (projectsHostedCountError || issuedCarbonByMethodologyError || issuedCarbonByProjectTypeError) {
     return <FormattedMessage id={'unable-to-load-contents'} />;
   }
 
-  if (
-    !projectsStatusCountData &&
-    !projectsHostedCountData &&
-    !issuedCarbonByMethodologyData &&
-    !issuedCarbonByProjectTypeData
-  ) {
+  if (!projectsHostedCountData && !issuedCarbonByMethodologyData && !issuedCarbonByProjectTypeData) {
     return <FormattedMessage id={'no-records-found'} />;
   }
 
@@ -84,11 +54,9 @@ const Dashboard: React.FC = () => {
       <Tabs aria-label="Default tabs" className="pt-4">
         <Tabs.Item title={<FormattedMessage id="projects-view" />} id="projects-view">
           {contentsLoading ? (
-            <CardSkeleton />
+            <SkeletonCard />
           ) : (
             <ProjectsTab
-              projectsStatusCountData={(projectsStatusCountData?.data as ProjectsStatusCount[]) || []}
-              projectsStatusCountLoading={projectsStatusCountLoading}
               projectsHostedCountData={projectsHostedCountData?.data as ProjectsHostedCount}
               projectsHostedCountLoading={projectsHostedCountLoading}
               issuedCarbonByMethodologyData={
