@@ -208,6 +208,6 @@
   "no-changes-have-been-made": "No changes have been made",
   "api-host-loaded-from-configuration": "API host loaded from configuration",
 
-  "projects-view": "Projects View",
-  "units-view": "Units View"
+  "projects-view": "projects view",
+  "units-view": "units view"
 }
