@@ -6,10 +6,10 @@ const renderSkeletonBars = (count: number) => {
 };
 
 const SkeletonCard: React.FC = () => {
-  const data = useMemo(() => Array.from({ length: 3 }, (_, index) => index + 1), []);
+  const data = useMemo(() => Array.from({ length: 1 }, (_, index) => index + 1), []);
 
   return (
-    <div className="relative grid grid-cols-1 gap-4 m-4 md:grid-cols-3" style={{ height: 200 }}>
+    <div className="relative grid grid-cols-1 gap-4" style={{ height: 200 }}>
       {data.map((item) => (
         <Card key={item}>{renderSkeletonBars(3)}</Card>
       ))}

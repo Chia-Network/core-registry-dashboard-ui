@@ -26,7 +26,6 @@ const projectsCountApi = cadtApi.injectEndpoints({
     >({
       query: ({ status, hostRegistry }: GetProjectsCountParams) => {
         const params: GetProjectsCountParams = {};
-        console.log(status, hostRegistry);
         if (isNil(status) && isNil(hostRegistry)) {
           throw new Error('Either status or hostRegistry must be provided');
         }
