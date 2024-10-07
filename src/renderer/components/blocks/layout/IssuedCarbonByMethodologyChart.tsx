@@ -19,11 +19,19 @@ const IssuedCarbonByMethodologyChart = () => {
   }
 
   if (issuedCarbonByMethodologyError) {
-    return <FormattedMessage id={'unable-to-load-contents'} />;
+    return (
+      <p className="capitalize">
+        <FormattedMessage id={'unable-to-load-contents'} />
+      </p>
+    );
   }
 
   if (!issuedCarbonByMethodologyData) {
-    return <FormattedMessage id={'no-records-found'} />;
+    return (
+      <p className="capitalize">
+        <FormattedMessage id={'no-records-found'} />
+      </p>
+    );
   }
 
   const chartData = generateBarChartData(issuedCarbonByMethodologyData.data.issuedTonsCo2, 'methodology');

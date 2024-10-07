@@ -4,19 +4,17 @@ import { Chart } from 'chart.js';
 import { generatePieChartData, pieChartOptionsBase } from '@/utils/chart-utils';
 import { useGetProjectsCountQuery } from '@/api';
 import { FormattedMessage } from 'react-intl';
-import { useQueryParamState } from '@/hooks';
 import { ProjectsHostedCount } from '@/schemas/ProjectsHostedCount.schema';
 
 Chart.register(ChartDataLabels);
 
 const HomeOrgProjectsCountChart = () => {
-  const [hostRegistry /* set func here */] = useQueryParamState('hostRegistry', 'true');
   const {
     data: homeOrgProjectsCountData,
     isLoading: homeOrgProjectsCountLoading,
     error: homeOrgProjectsCountError,
   } = useGetProjectsCountQuery({
-    hostRegistry: hostRegistry ? Boolean(hostRegistry) : undefined,
+    hostRegistry: true,
   });
 
   if (homeOrgProjectsCountLoading) {
@@ -24,11 +22,19 @@ const HomeOrgProjectsCountChart = () => {
   }
 
   if (homeOrgProjectsCountError) {
-    return <FormattedMessage id={'unable-to-load-contents'} />;
+    return (
+      <p className="capitalize">
+        <FormattedMessage id={'unable-to-load-contents'} />
+      </p>
+    );
   }
 
   if (!homeOrgProjectsCountData) {
-    return <FormattedMessage id={'no-records-found'} />;
+    return (
+      <p className="capitalize">
+        <FormattedMessage id={'no-records-found'} />
+      </p>
+    );
   }
 
   const hostedCountData = homeOrgProjectsCountData.data as ProjectsHostedCount;

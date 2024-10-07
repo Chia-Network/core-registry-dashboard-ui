@@ -19,11 +19,19 @@ const IssuedCarbonByProjectTypeChart = () => {
   }
 
   if (issuedCarbonByProjectTypeError) {
-    return <FormattedMessage id={'unable-to-load-contents'} />;
+    return (
+      <p className="capitalize">
+        <FormattedMessage id={'unable-to-load-contents'} />
+      </p>
+    );
   }
 
   if (!issuedCarbonByProjectTypeData) {
-    return <FormattedMessage id={'no-records-found'} />;
+    return (
+      <p className="capitalize">
+        <FormattedMessage id={'no-records-found'} />
+      </p>
+    );
   }
 
   const chartData = generateBarChartData(issuedCarbonByProjectTypeData.data.issuedTonsCo2, 'projectType');

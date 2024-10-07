@@ -3,20 +3,18 @@ import { FormattedMessage } from 'react-intl';
 import { useGetProjectsCountQuery } from '@/api';
 import { Card, SkeletonCard } from '@/components';
 import { ProjectsStatusCount } from '@/schemas/ProjectsStatusCount.schema';
-import { useQueryParamState } from '@/hooks';
 
 interface AuthorizedProjectsCardProps {
   onGlossaryClick: () => void;
 }
 
 const AuthorizedProjectsCard: React.FC<AuthorizedProjectsCardProps> = ({ onGlossaryClick }) => {
-  const [projectStatusCount /* set func here */] = useQueryParamState('status', 'true');
   const {
     data: projectsStatusCountData,
     isLoading: projectsStatusCountLoading,
     error: projectsStatusCountError,
   } = useGetProjectsCountQuery({
-    status: projectStatusCount ? Boolean(projectStatusCount) : undefined,
+    status: true,
   });
 
   if (projectsStatusCountLoading) {
@@ -24,11 +22,19 @@ const AuthorizedProjectsCard: React.FC<AuthorizedProjectsCardProps> = ({ onGloss
   }
 
   if (projectsStatusCountError) {
-    return <FormattedMessage id={'unable-to-load-contents'} />;
+    return (
+      <p className="capitalize">
+        <FormattedMessage id={'unable-to-load-contents'} />
+      </p>
+    );
   }
 
   if (!projectsStatusCountData) {
-    return <FormattedMessage id={'no-records-found'} />;
+    return (
+      <p className="capitalize">
+        <FormattedMessage id={'no-records-found'} />
+      </p>
+    );
   }
 
   const projectStatusData = projectsStatusCountData.data as ProjectsStatusCount[];
