@@ -14,10 +14,11 @@ interface PieChartProps {
     }[];
   };
   options?: any;
+  className?: string;
 }
 
-const PieChart: React.FC<PieChartProps> = ({ data, options }) => {
-  return <Pie data={data} options={options} />;
+const PieChart: React.FC<PieChartProps> = ({ data, options, className }) => {
+  return <Pie data={data} options={options} className={className} />;
 };
 
 export { PieChart };

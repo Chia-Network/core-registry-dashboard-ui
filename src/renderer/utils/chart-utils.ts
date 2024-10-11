@@ -50,6 +50,7 @@ export const pieChartOptionsBase = {
     legend: {
       display: true,
     },
+    title: '',
     responsive: true,
     datalabels: {
       color: 'white',
@@ -84,13 +85,32 @@ export const generateBarChartData = (data: { labelKey?: string; tonsCo2: number 
   };
 };
 
-export const generatePieChartData = (labels: string[], data: number[]) => ({
+// export const generatePieChartData = (labels: string[], data: number[]) => ({
+//   labels,
+//   datasets: [
+//     {
+//       label: 'Count',
+//       data,
+//       backgroundColor: PIE_COLORS,
+//       borderWidth: 1,
+//     },
+//   ],
+// });
+
+export const generatePieChartData = (
+  labels: string[],
+  data: number[],
+  backgroundColor: string[],
+  borderColor: string[],
+  datasetLabel: string,
+) => ({
   labels,
   datasets: [
     {
-      label: 'Count',
+      label: datasetLabel,
       data,
-      backgroundColor: PIE_COLORS,
+      backgroundColor,
+      borderColor,
       borderWidth: 1,
     },
   ],

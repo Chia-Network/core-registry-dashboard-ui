@@ -209,5 +209,6 @@
   "api-host-loaded-from-configuration": "API host loaded from configuration",
 
   "projects-view": "projects view",
-  "units-view": "units view"
+  "units-view": "units view",
+  "carbon-credits-by-status": "carbon credits by status"
 }

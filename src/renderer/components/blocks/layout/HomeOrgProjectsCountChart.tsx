@@ -7,6 +7,8 @@ import { FormattedMessage } from 'react-intl';
 import { ProjectsHostedCount } from '@/schemas/ProjectsHostedCount.schema';
 
 Chart.register(ChartDataLabels);
+const backgroundColors = ['rgba(83, 217, 217, 0.7)', 'rgba(0, 43, 73, 0.7)'];
+const borderColors = ['#53D9D9', '#002B49'];
 
 const HomeOrgProjectsCountChart = () => {
   const {
@@ -44,6 +46,9 @@ const HomeOrgProjectsCountChart = () => {
   const chartData = generatePieChartData(
     ['Externally Hosted Projects', 'Self Hosted Projects'],
     [externallyHostedCount, selfHostedCount],
+    backgroundColors,
+    borderColors,
+    'Count',
   );
 
   return (
