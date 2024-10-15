@@ -9,8 +9,6 @@ interface PieChartProps {
     datasets: {
       label: string;
       data: number[];
-      backgroundColor: string[];
-      borderWidth: number;
     }[];
   };
   options?: any;

@@ -1,5 +1,5 @@
-export const BAR_COLORS = ['#53D9D9', '#002B49', '#0067A0'];
-export const PIE_COLORS = ['#53D9D9', '#002B49'];
+const BORDER_COLORS = ['rgba(75, 192, 192, 1)', 'rgba(0, 43, 73, 1)', 'rgba(0, 103, 160, 1)'];
+const BG_COLORS = ['rgba(75, 192, 192, 0.8)', 'rgba(0, 43, 73, 0.8)', 'rgba(0, 103, 160, 0.8)'];
 
 export const barChartOptionsBase = {
   indexAxis: 'y',
@@ -50,7 +50,14 @@ export const pieChartOptionsBase = {
     legend: {
       display: true,
     },
-    title: '',
+    title: {
+      display: true,
+      text: '',
+      font: {
+        size: 18,
+      },
+      position: 'bottom',
+    },
     responsive: true,
     datalabels: {
       color: 'white',
@@ -59,59 +66,31 @@ export const pieChartOptionsBase = {
   },
 };
 
-export const generateBarChartData = (data: { labelKey?: string; tonsCo2: number }[], labelKey: string) => {
-  const filtered = data
-    .filter((item) => item.tonsCo2 > 0 && item[labelKey])
-    .sort((a, b) => b.tonsCo2 - a.tonsCo2)
-    .slice(0, 3);
-
-  const labels = filtered.map((item) => {
-    const label = item[labelKey];
-    return label ? (label.length > 35 ? label.slice(0, 35) + '...' : label) : '';
-  });
-
-  const chartData = filtered.map((item) => item.tonsCo2);
-
-  return {
-    labels,
-    datasets: [
-      {
-        label: 'tonsCo2',
-        data: chartData,
-        backgroundColor: BAR_COLORS,
-        borderWidth: 1,
-      },
-    ],
-  };
-};
-
-// export const generatePieChartData = (labels: string[], data: number[]) => ({
-//   labels,
-//   datasets: [
-//     {
-//       label: 'Count',
-//       data,
-//       backgroundColor: PIE_COLORS,
-//       borderWidth: 1,
-//     },
-//   ],
-// });
-
-export const generatePieChartData = (
-  labels: string[],
-  data: number[],
-  backgroundColor: string[],
-  borderColor: string[],
-  datasetLabel: string,
-) => ({
+export const createChartDataWithSingleDataset = (labels: string[], data: any[], datasetLabel: any) => ({
   labels,
   datasets: [
     {
       label: datasetLabel,
       data,
-      backgroundColor,
-      borderColor,
+      backgroundColor: BG_COLORS,
+      borderColor: BORDER_COLORS,
       borderWidth: 1,
     },
   ],
 });
+
+export const createChartDataWithMultipleDatasets = (
+  labels: string[],
+  datasets: Array<{ label: string; data: number[] }>,
+) => {
+  return {
+    labels,
+    datasets: datasets.map((dataset, index) => ({
+      label: dataset.label,
+      data: dataset.data,
+      backgroundColor: BG_COLORS[index % BG_COLORS.length],
+      borderColor: BORDER_COLORS[index % BORDER_COLORS.length],
+      borderWidth: 1,
+    })),
+  };
+};

@@ -9,15 +9,14 @@ interface BarChartProps {
     datasets: {
       label: string;
       data: number[];
-      backgroundColor: string[];
-      borderWidth: number;
     }[];
   };
   options?: any;
+  className?: string;
 }
 
-const BarChart: React.FC<BarChartProps> = ({ data, options }) => {
-  return <Bar data={data} options={options} />;
+const BarChart: React.FC<BarChartProps> = ({ data, options, className }) => {
+  return <Bar data={data} options={options} className={className} />;
 };
 
 export { BarChart };
