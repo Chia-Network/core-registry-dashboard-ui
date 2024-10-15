@@ -1,3 +1,4 @@
+import { TonsCo2 } from '@/schemas/TonsCo2.schema';
 import { cadtApi } from './index';
 
 interface TonsCo2Params {
@@ -11,7 +12,7 @@ interface TonsCo2Params {
 }
 
 interface TonsCo2Response {
-  data: any;
+  data: TonsCo2[];
 }
 
 const tonsCo2Api = cadtApi.injectEndpoints({

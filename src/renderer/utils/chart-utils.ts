@@ -45,6 +45,52 @@ export const barChartOptionsBase = {
   },
 };
 
+export const stackedBarChartOptionsBase = {
+  indexAxis: 'x',
+  scales: {
+    x: {
+      stacked: true,
+      grid: { display: false },
+      title: {
+        display: false,
+      },
+      ticks: {
+        autoSkip: false,
+      },
+    },
+    y: {
+      stacked: true,
+      beginAtZero: true,
+      grid: { display: false },
+      title: {
+        display: true,
+        text: 'Tons of CO2',
+      },
+      ticks: {
+        display: false,
+      },
+    },
+  },
+
+  plugins: {
+    legend: {
+      display: true,
+      position: 'left',
+    },
+    title: {
+      display: true,
+      text: '',
+      font: {
+        size: 18,
+      },
+      position: 'bottom',
+    },
+    datalabels: {
+      display: false,
+    },
+  },
+};
+
 export const pieChartOptionsBase = {
   plugins: {
     legend: {
