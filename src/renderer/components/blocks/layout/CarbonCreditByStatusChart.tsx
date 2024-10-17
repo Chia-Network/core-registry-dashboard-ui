@@ -8,7 +8,7 @@ import { generateYearsRange } from '@/utils/date-utils';
 
 ChartJS.register(ArcElement, Tooltip, Legend);
 
-const CarbonCreditByStatusChart = () => {
+const CarbonCreditByStatusChart: React.FC = () => {
   const [unitStatus] = useQueryParamState('carbonCreditUnitStatus', 'all');
   const [vintageYear, setVintageYear] = useQueryParamState('vintageYear', undefined);
 
