@@ -39,9 +39,9 @@ const IssuedCarbonByMethodologyChart = () => {
     .sort((a, b) => b.tonsCo2 - a.tonsCo2)
     .slice(0, 3);
 
-  const labels = filteredData.map((item) => {
-    const label = item.methodology || '';
-    return label.length > 35 ? label.slice(0, 35) + '...' : label;
+  const labels = filteredData?.map((item) => {
+    const label = item?.methodology || '';
+    return label?.length > 35 ? label.slice(0, 35) + '...' : label;
   });
 
   const chartDataArray = filteredData.map((item) => item.tonsCo2);
