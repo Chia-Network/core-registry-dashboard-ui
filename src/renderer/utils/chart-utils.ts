@@ -1,3 +1,5 @@
+import { IntlShape } from 'react-intl';
+
 const BORDER_COLORS = ['rgba(75, 192, 192, 1)', 'rgba(0, 43, 73, 1)', 'rgba(0, 103, 160, 1)'];
 const BG_COLORS = ['rgba(75, 192, 192, 0.8)', 'rgba(0, 43, 73, 0.8)', 'rgba(0, 103, 160, 0.8)'];
 
@@ -140,3 +142,23 @@ export const createChartDataWithMultipleDatasets = (
     })),
   };
 };
+
+export const createNoDataPlugin = (intl: IntlShape) => ({
+  id: 'noDataPlugin',
+  afterDatasetsDraw: (chart: any) => {
+    const dataset = chart.data.datasets[0];
+    const ctx = chart.ctx;
+
+    if (dataset.data.length === 0) {
+      const { width, height } = chart;
+      chart.clear();
+      ctx.save();
+      ctx.textAlign = 'center';
+      ctx.textBaseline = 'middle';
+      ctx.font = '16px sans-serif';
+      ctx.fillStyle = 'gray';
+      ctx.fillText(intl.formatMessage({ id: 'no-data-available' }), width / 2, height / 2);
+      ctx.restore();
+    }
+  },
+});
