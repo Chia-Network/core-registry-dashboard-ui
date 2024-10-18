@@ -209,5 +209,11 @@
   "api-host-loaded-from-configuration": "API host loaded from configuration",
 
   "projects-view": "projects view",
-  "units-view": "units view"
+  "units-view": "units view",
+  "retired": "Retired",
+  "cancelled": "Cancelled",
+  "held": "Held",
+  "issued-carbon-last-10-years": "issued carbon last 10 years",
+  "carbon-credits-by-status": "carbon credits by status",
+  "no-data-available": "no data available"
 }

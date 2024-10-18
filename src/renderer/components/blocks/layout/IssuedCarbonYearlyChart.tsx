@@ -3,10 +3,15 @@ import { BarChart, Card, Select, SkeletonCard } from '@/components';
 import { useQueryParamState } from '@/hooks';
 import { FormattedMessage } from 'react-intl';
 import { Chart as ChartJS, ArcElement, Tooltip, Legend } from 'chart.js';
-import { createChartDataWithMultipleDatasets, stackedBarChartOptionsBase } from '@/utils/chart-utils';
+import {
+  createChartDataWithMultipleDatasets,
+  createNoDataPlugin,
+  stackedBarChartOptionsBase,
+} from '@/utils/chart-utils';
 import { TonsCo2 } from '@/schemas/TonsCo2.schema';
 import { generateYearsRange } from '@/utils/date-utils';
 import { IntlShape, useIntl } from 'react-intl';
+import { capitalizeText } from '@/utils/text-utils';
 
 ChartJS.register(ArcElement, Tooltip, Legend);
 
@@ -107,10 +112,11 @@ const IssuedCarbonYearlyChart: React.FC = () => {
             ...stackedBarChartOptionsBase.plugins,
             title: {
               ...stackedBarChartOptionsBase,
-              text: 'Issued Carbon (Last 10 years)',
+              text: capitalizeText(intl.formatMessage({ id: 'issued-carbon-last-10-years' })),
             },
           },
         }}
+        plugins={[createNoDataPlugin(intl)]}
       />
     </Card>
   );

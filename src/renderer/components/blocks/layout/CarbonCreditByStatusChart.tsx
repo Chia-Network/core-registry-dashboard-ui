@@ -1,16 +1,18 @@
 import { useGetTonsCo2Query } from '@/api/cadt/v1/tonsCo2.api';
 import { PieChart, Card, SkeletonCard, Select } from '@/components';
 import { useQueryParamState } from '@/hooks';
-import { FormattedMessage } from 'react-intl';
+import { FormattedMessage, IntlShape, useIntl } from 'react-intl';
 import { Chart as ChartJS, ArcElement, Tooltip, Legend } from 'chart.js';
-import { createChartDataWithSingleDataset, pieChartOptionsBase } from '@/utils/chart-utils';
+import { createChartDataWithSingleDataset, createNoDataPlugin, pieChartOptionsBase } from '@/utils/chart-utils';
 import { generateYearsRange } from '@/utils/date-utils';
+import { capitalizeText } from '@/utils/text-utils';
 
 ChartJS.register(ArcElement, Tooltip, Legend);
 
 const CarbonCreditByStatusChart: React.FC = () => {
   const [unitStatus] = useQueryParamState('carbonCreditUnitStatus', 'all');
   const [vintageYear, setVintageYear] = useQueryParamState('vintageYear', undefined);
+  const intl: IntlShape = useIntl();
 
   const {
     data: carbonCreditByStatusData,
@@ -60,10 +62,11 @@ const CarbonCreditByStatusChart: React.FC = () => {
             ...pieChartOptionsBase.plugins,
             title: {
               ...pieChartOptionsBase.plugins.title,
-              text: 'Carbon Credits by Status',
+              text: capitalizeText(intl.formatMessage({ id: 'carbon-credits-by-status' })),
             },
           },
         }}
+        plugins={[createNoDataPlugin(intl)]}
       />
     </Card>
   );
