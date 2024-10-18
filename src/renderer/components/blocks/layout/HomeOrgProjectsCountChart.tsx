@@ -1,7 +1,7 @@
 import { Card, PieChart, SkeletonCard } from '@/components';
 import ChartDataLabels from 'chartjs-plugin-datalabels';
 import { Chart } from 'chart.js';
-import { generatePieChartData, pieChartOptionsBase } from '@/utils/chart-utils';
+import { createChartDataWithSingleDataset, pieChartOptionsBase } from '@/utils/chart-utils';
 import { useGetProjectsCountQuery } from '@/api';
 import { FormattedMessage } from 'react-intl';
 import { ProjectsHostedCount } from '@/schemas/ProjectsHostedCount.schema';
@@ -41,9 +41,10 @@ const HomeOrgProjectsCountChart = () => {
   const selfHostedCount = hostedCountData.selfHostedProjectCount || 0;
   const externallyHostedCount = hostedCountData.externallyHostedProjectCount || 0;
 
-  const chartData = generatePieChartData(
+  const chartData = createChartDataWithSingleDataset(
     ['Externally Hosted Projects', 'Self Hosted Projects'],
     [externallyHostedCount, selfHostedCount],
+    'Count',
   );
 
   return (
