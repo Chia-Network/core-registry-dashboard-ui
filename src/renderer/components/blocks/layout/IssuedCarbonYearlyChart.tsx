@@ -6,6 +6,7 @@ import { Chart as ChartJS, ArcElement, Tooltip, Legend } from 'chart.js';
 import { createChartDataWithMultipleDatasets, stackedBarChartOptionsBase } from '@/utils/chart-utils';
 import { TonsCo2 } from '@/schemas/TonsCo2.schema';
 import { generateYearsRange } from '@/utils/date-utils';
+import { IntlShape, useIntl } from 'react-intl';
 
 ChartJS.register(ArcElement, Tooltip, Legend);
 
@@ -31,17 +32,12 @@ const processCarbonDataByYearAndType = (data: TonsCo2[], unitStatus: string | un
   return groupedData;
 };
 
-const unitStatusOptions = [
-  { label: 'Retired', value: 'Retired' },
-  { label: 'Held', value: 'Held' },
-  { label: 'Cancelled', value: 'Cancelled' },
-];
-
 const IssuedCarbonYearlyChart: React.FC = () => {
   const [vintageYearRangeStart] = useQueryParamState('vintageYearRangeStart', `${new Date().getFullYear() - 9}`);
   const [vintageYearRangeEnd] = useQueryParamState('vintageYearRangeEnd', `${new Date().getFullYear()}`);
   const [unitStatus, setUnitStatus] = useQueryParamState('issuedCarbonUnitStatus', undefined);
   const [unitType] = useQueryParamState('unitType', 'all');
+  const intl: IntlShape = useIntl();
 
   const {
     data: carbonCreditByStatusData,
@@ -68,6 +64,12 @@ const IssuedCarbonYearlyChart: React.FC = () => {
       </p>
     );
   }
+
+  const unitStatusOptions = [
+    { label: intl.formatMessage({ id: 'retired' }), value: 'Retired' },
+    { label: intl.formatMessage({ id: 'held' }), value: 'Held' },
+    { label: intl.formatMessage({ id: 'cancelled' }), value: 'Cancelled' },
+  ];
 
   const lastTenYears = generateYearsRange(10)
     .map((year) => year.label)
