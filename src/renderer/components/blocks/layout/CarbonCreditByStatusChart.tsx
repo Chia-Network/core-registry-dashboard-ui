@@ -24,8 +24,8 @@ const CarbonCreditByStatusChart: React.FC = () => {
   const datasetData = carbonCreditByStatusData?.data.map((item: any) => item.tonsCo2) || [];
   const chartData = createChartDataWithSingleDataset(labels, datasetData, 'TonsCo2');
 
-  const handleYearChange = (value) => {
-    setVintageYear(value);
+  const handleYearChange = (value: string | number) => {
+    setVintageYear(value as string);
   };
 
   if (carbonCreditByStatusLoading) {
