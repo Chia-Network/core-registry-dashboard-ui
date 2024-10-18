@@ -71,9 +71,9 @@ const IssuedCarbonYearlyChart: React.FC = () => {
   }
 
   const unitStatusOptions = [
-    { label: intl.formatMessage({ id: 'retired' }), value: 'Retired' },
-    { label: intl.formatMessage({ id: 'held' }), value: 'Held' },
-    { label: intl.formatMessage({ id: 'cancelled' }), value: 'Cancelled' },
+    { label: capitalizeText(intl.formatMessage({ id: 'retired' })), value: 'Retired' },
+    { label: capitalizeText(intl.formatMessage({ id: 'held' })), value: 'Held' },
+    { label: capitalizeText(intl.formatMessage({ id: 'cancelled' })), value: 'Cancelled' },
   ];
 
   const lastTenYears = generateYearsRange(10)

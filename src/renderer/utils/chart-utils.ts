@@ -1,4 +1,5 @@
 import { IntlShape } from 'react-intl';
+import { capitalizeText } from './text-utils';
 
 const BORDER_COLORS = ['rgba(75, 192, 192, 1)', 'rgba(0, 43, 73, 1)', 'rgba(0, 103, 160, 1)'];
 const BG_COLORS = ['rgba(75, 192, 192, 0.8)', 'rgba(0, 43, 73, 0.8)', 'rgba(0, 103, 160, 0.8)'];
@@ -157,7 +158,7 @@ export const createNoDataPlugin = (intl: IntlShape) => ({
       ctx.textBaseline = 'middle';
       ctx.font = '16px sans-serif';
       ctx.fillStyle = 'gray';
-      ctx.fillText(intl.formatMessage({ id: 'no-data-available' }), width / 2, height / 2);
+      ctx.fillText(capitalizeText(intl.formatMessage({ id: 'no-data-available' })), width / 2, height / 2);
       ctx.restore();
     }
   },

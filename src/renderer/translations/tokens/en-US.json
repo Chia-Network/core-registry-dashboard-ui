@@ -210,9 +210,9 @@
 
   "projects-view": "projects view",
   "units-view": "units view",
-  "retired": "Retired",
-  "cancelled": "Cancelled",
-  "held": "Held",
+  "retired": "retired",
+  "cancelled": "cancelled",
+  "held": "held",
   "issued-carbon-last-10-years": "issued carbon last 10 years",
   "carbon-credits-by-status": "carbon credits by status",
   "no-data-available": "no data available"
