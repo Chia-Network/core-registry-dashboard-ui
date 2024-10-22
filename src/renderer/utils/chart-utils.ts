@@ -1,5 +1,8 @@
-export const BAR_COLORS = ['#53D9D9', '#002B49', '#0067A0'];
-export const PIE_COLORS = ['#53D9D9', '#002B49'];
+import { IntlShape } from 'react-intl';
+import { capitalizeText } from './text-utils';
+
+const BORDER_COLORS = ['rgba(75, 192, 192, 1)', 'rgba(0, 43, 73, 1)', 'rgba(0, 103, 160, 1)'];
+const BG_COLORS = ['rgba(75, 192, 192, 0.8)', 'rgba(0, 43, 73, 0.8)', 'rgba(0, 103, 160, 0.8)'];
 
 export const barChartOptionsBase = {
   indexAxis: 'y',
@@ -45,10 +48,64 @@ export const barChartOptionsBase = {
   },
 };
 
+export const stackedBarChartOptionsBase = {
+  indexAxis: 'x',
+  scales: {
+    x: {
+      stacked: true,
+      grid: { display: false },
+      title: {
+        display: false,
+      },
+      ticks: {
+        autoSkip: false,
+      },
+    },
+    y: {
+      stacked: true,
+      beginAtZero: true,
+      grid: { display: false },
+      title: {
+        display: true,
+        text: 'Tons CO2',
+      },
+      ticks: {
+        display: false,
+      },
+    },
+  },
+
+  plugins: {
+    legend: {
+      display: true,
+      position: 'left',
+    },
+    title: {
+      display: true,
+      text: '',
+      font: {
+        size: 18,
+      },
+      position: 'bottom',
+    },
+    datalabels: {
+      display: false,
+    },
+  },
+};
+
 export const pieChartOptionsBase = {
   plugins: {
     legend: {
       display: true,
+    },
+    title: {
+      display: true,
+      text: '',
+      font: {
+        size: 18,
+      },
+      position: 'bottom',
     },
     responsive: true,
     datalabels: {
@@ -58,40 +115,52 @@ export const pieChartOptionsBase = {
   },
 };
 
-export const generateBarChartData = (data: { labelKey?: string; tonsCo2: number }[], labelKey: string) => {
-  const filtered = data
-    .filter((item) => item.tonsCo2 > 0 && item[labelKey])
-    .sort((a, b) => b.tonsCo2 - a.tonsCo2)
-    .slice(0, 3);
-
-  const labels = filtered.map((item) => {
-    const label = item[labelKey];
-    return label ? (label.length > 35 ? label.slice(0, 35) + '...' : label) : '';
-  });
-
-  const chartData = filtered.map((item) => item.tonsCo2);
-
-  return {
-    labels,
-    datasets: [
-      {
-        label: 'tonsCo2',
-        data: chartData,
-        backgroundColor: BAR_COLORS,
-        borderWidth: 1,
-      },
-    ],
-  };
-};
-
-export const generatePieChartData = (labels: string[], data: number[]) => ({
+export const createChartDataWithSingleDataset = (labels: string[], data: any[], datasetLabel: any) => ({
   labels,
   datasets: [
     {
-      label: 'Count',
+      label: datasetLabel,
       data,
-      backgroundColor: PIE_COLORS,
+      backgroundColor: BG_COLORS,
+      borderColor: BORDER_COLORS,
       borderWidth: 1,
     },
   ],
+});
+
+export const createChartDataWithMultipleDatasets = (
+  labels: string[],
+  datasets: Array<{ label: string; data: number[] }>,
+) => {
+  return {
+    labels,
+    datasets: datasets.map((dataset, index) => ({
+      label: dataset.label,
+      data: dataset.data,
+      backgroundColor: BG_COLORS[index % BG_COLORS.length],
+      borderColor: BORDER_COLORS[index % BORDER_COLORS.length],
+      borderWidth: 1,
+    })),
+  };
+};
+
+export const createNoDataPlugin = (intl: IntlShape) => ({
+  id: 'noDataPlugin',
+  afterDatasetsDraw: (chart: any) => {
+    const datasets = chart.data.datasets;
+    const ctx = chart.ctx;
+    const allDataEmpty = datasets.every((dataset) => dataset.data.length === 0);
+
+    if (allDataEmpty) {
+      const { width, height } = chart;
+      chart.clear();
+      ctx.save();
+      ctx.textAlign = 'center';
+      ctx.textBaseline = 'middle';
+      ctx.font = '16px sans-serif';
+      ctx.fillStyle = 'gray';
+      ctx.fillText(capitalizeText(intl.formatMessage({ id: 'no-data-available' })), width / 2, height / 2);
+      ctx.restore();
+    }
+  },
 });

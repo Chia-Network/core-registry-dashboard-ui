@@ -6,3 +6,5 @@ export * from './ApprovedProjectsCard';
 export * from './IssuedCarbonByMethodologyChart';
 export * from './IssuedCarbonByProjectTypeChart';
 export * from './HomeOrgProjectsCountChart';
+export * from './CarbonCreditByStatusChart';
+export * from './IssuedCarbonYearlyChart';

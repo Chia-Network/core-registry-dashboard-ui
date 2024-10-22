@@ -1,4 +1,4 @@
-import { Chart as ChartJS, CategoryScale, LinearScale, BarElement, Title, Tooltip, Legend } from 'chart.js';
+import { Chart as ChartJS, CategoryScale, LinearScale, BarElement, Title, Tooltip, Legend, Plugin } from 'chart.js';
 import { Bar } from 'react-chartjs-2';
 
 ChartJS.register(CategoryScale, LinearScale, BarElement, Title, Tooltip, Legend);
@@ -9,15 +9,15 @@ interface BarChartProps {
     datasets: {
       label: string;
       data: number[];
-      backgroundColor: string[];
-      borderWidth: number;
     }[];
   };
+  plugins?: Plugin<'bar'>[];
   options?: any;
+  className?: string;
 }
 
-const BarChart: React.FC<BarChartProps> = ({ data, options }) => {
-  return <Bar data={data} options={options} />;
+const BarChart: React.FC<BarChartProps> = ({ data, options, className, plugins }) => {
+  return <Bar data={data} options={options} className={className} plugins={plugins} />;
 };
 
 export { BarChart };
