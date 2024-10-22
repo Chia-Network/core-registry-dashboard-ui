@@ -147,10 +147,11 @@ export const createChartDataWithMultipleDatasets = (
 export const createNoDataPlugin = (intl: IntlShape) => ({
   id: 'noDataPlugin',
   afterDatasetsDraw: (chart: any) => {
-    const dataset = chart.data.datasets[0];
+    const datasets = chart.data.datasets;
     const ctx = chart.ctx;
+    const allDataEmpty = datasets.every((dataset) => dataset.data.length === 0);
 
-    if (dataset.data.length === 0) {
+    if (allDataEmpty) {
       const { width, height } = chart;
       chart.clear();
       ctx.save();
