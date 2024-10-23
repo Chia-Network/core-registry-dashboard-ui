@@ -22,7 +22,11 @@ const CarbonCreditByStatusChart: React.FC = () => {
 
   const labels = carbonCreditByStatusData?.data.map((item: any) => item.unitStatus) || [];
   const datasetData = carbonCreditByStatusData?.data.map((item: any) => item.tonsCo2) || [];
-  const chartData = createChartDataWithSingleDataset(labels, datasetData, 'TonsCo2');
+  const chartData = createChartDataWithSingleDataset(
+    labels,
+    datasetData,
+    capitalizeText(intl.formatMessage({ id: 'tons-co2' })),
+  );
 
   const handleYearChange = (value: string | number) => {
     setVintageYear(value as string);

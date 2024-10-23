@@ -67,7 +67,7 @@ export const stackedBarChartOptionsBase = {
       grid: { display: false },
       title: {
         display: true,
-        text: 'Tons CO2',
+        text: '',
       },
       ticks: {
         display: false,

@@ -108,6 +108,16 @@ const IssuedCarbonYearlyChart: React.FC = () => {
         data={chartData2}
         options={{
           ...stackedBarChartOptionsBase,
+          scales: {
+            ...stackedBarChartOptionsBase.scales,
+            y: {
+              ...stackedBarChartOptionsBase.scales.y,
+              title: {
+                ...stackedBarChartOptionsBase.scales.y.title,
+                text: capitalizeText(intl.formatMessage({ id: 'tons-co2' })),
+              },
+            },
+          },
           plugins: {
             ...stackedBarChartOptionsBase.plugins,
             title: {

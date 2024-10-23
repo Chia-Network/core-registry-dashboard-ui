@@ -51,7 +51,7 @@ const IssuedCarbonByProjectTypeChart = () => {
   const chartData = createChartDataWithSingleDataset(
     labels,
     chartDataArray,
-    capitalizeText(intl.formatMessage({ id: 'tons-co-2' })),
+    capitalizeText(intl.formatMessage({ id: 'tons-co2' })),
   );
 
   return (
