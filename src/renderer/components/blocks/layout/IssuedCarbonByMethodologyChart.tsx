@@ -4,6 +4,7 @@ import { Chart } from 'chart.js';
 import { barChartOptionsBase, createChartDataWithSingleDataset, createNoDataPlugin } from '@/utils/chart-utils';
 import { useGetIssuedCarbonByMethodologyQuery } from '@/api';
 import { FormattedMessage, IntlShape, useIntl } from 'react-intl';
+import { capitalizeText } from '../../../utils/text-utils';
 
 Chart.register(ChartDataLabels);
 
@@ -47,7 +48,11 @@ const IssuedCarbonByMethodologyChart = () => {
 
   const chartDataArray = filteredData.map((item) => item.tonsCo2);
 
-  const chartData = createChartDataWithSingleDataset(labels, chartDataArray, 'tonsCo2');
+  const chartData = createChartDataWithSingleDataset(
+    labels,
+    chartDataArray,
+    capitalizeText(intl.formatMessage({ id: 'tons-co-2' })),
+  );
 
   return (
     <Card>
@@ -59,7 +64,7 @@ const IssuedCarbonByMethodologyChart = () => {
             ...barChartOptionsBase.plugins,
             title: {
               ...barChartOptionsBase.plugins.title,
-              text: 'Issued Carbon by Methodology',
+              text: capitalizeText(intl.formatMessage({ id: 'issued-carbon-by-methodology' })),
             },
           },
         }}
