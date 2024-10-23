@@ -149,8 +149,13 @@ export const createNoDataPlugin = (intl: IntlShape) => ({
   afterDatasetsDraw: (chart: any) => {
     const datasets = chart.data.datasets;
     const ctx = chart.ctx;
-    const allDataEmpty = datasets.every((dataset) => dataset.data.length === 0);
 
+    const allDataEmpty = datasets.every((dataset) => {
+      if (Array.isArray(dataset.backgroundColor)) {
+        return dataset.data.every((value: number) => value === 0);
+      }
+      return dataset.data.length === 0;
+    });
     if (allDataEmpty) {
       const { width, height } = chart;
       chart.clear();

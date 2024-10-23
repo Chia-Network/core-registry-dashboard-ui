@@ -1,9 +1,9 @@
 import { Card, PieChart, SkeletonCard } from '@/components';
 import ChartDataLabels from 'chartjs-plugin-datalabels';
 import { Chart } from 'chart.js';
-import { createChartDataWithSingleDataset, pieChartOptionsBase } from '@/utils/chart-utils';
+import { createChartDataWithSingleDataset, createNoDataPlugin, pieChartOptionsBase } from '@/utils/chart-utils';
 import { useGetProjectsCountQuery } from '@/api';
-import { FormattedMessage } from 'react-intl';
+import { FormattedMessage, IntlShape, useIntl } from 'react-intl';
 import { ProjectsHostedCount } from '@/schemas/ProjectsHostedCount.schema';
 
 Chart.register(ChartDataLabels);
@@ -16,6 +16,7 @@ const HomeOrgProjectsCountChart = () => {
   } = useGetProjectsCountQuery({
     hostRegistry: true,
   });
+  const intl: IntlShape = useIntl();
 
   if (homeOrgProjectsCountLoading) {
     return <SkeletonCard />;
@@ -60,6 +61,7 @@ const HomeOrgProjectsCountChart = () => {
             },
           },
         }}
+        plugins={[createNoDataPlugin(intl)]}
       />
     </Card>
   );

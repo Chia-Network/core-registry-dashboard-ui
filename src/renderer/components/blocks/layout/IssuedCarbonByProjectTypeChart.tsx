@@ -1,9 +1,9 @@
 import { BarChart, Card, SkeletonCard } from '@/components';
 import ChartDataLabels from 'chartjs-plugin-datalabels';
 import { Chart } from 'chart.js';
-import { barChartOptionsBase, createChartDataWithSingleDataset } from '@/utils/chart-utils';
+import { barChartOptionsBase, createChartDataWithSingleDataset, createNoDataPlugin } from '@/utils/chart-utils';
 import { useGetIssuedCarbonByProjectTypeQuery } from '@/api';
-import { FormattedMessage } from 'react-intl';
+import { FormattedMessage, IntlShape, useIntl } from 'react-intl';
 
 Chart.register(ChartDataLabels);
 
@@ -13,6 +13,7 @@ const IssuedCarbonByProjectTypeChart = () => {
     isLoading: issuedCarbonByProjectTypeLoading,
     error: issuedCarbonByProjectTypeError,
   } = useGetIssuedCarbonByProjectTypeQuery({});
+  const intl: IntlShape = useIntl();
 
   if (issuedCarbonByProjectTypeLoading) {
     return <SkeletonCard />;
@@ -62,6 +63,7 @@ const IssuedCarbonByProjectTypeChart = () => {
             },
           },
         }}
+        plugins={[createNoDataPlugin(intl)]}
       />
     </Card>
   );
