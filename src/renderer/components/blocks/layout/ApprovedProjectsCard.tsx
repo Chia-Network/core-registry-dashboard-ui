@@ -38,8 +38,10 @@ const ApprovedProjectsCard: React.FC<ApprovedProjectsCardProps> = ({ onGlossaryC
     );
   }
 
-  const projectStatusData = projectsStatusCountData.data as ProjectsStatusCount[];
-  const statusCount = projectStatusData.find((s) => s.projectStatus === 'Approved')?.count || 0;
+  const projectStatusData = projectsStatusCountData?.data
+    ? (projectsStatusCountData?.data as ProjectsStatusCount[])
+    : [];
+  const statusCount = projectStatusData.find((s) => s?.projectStatus === 'Approved')?.count || 0;
 
   return (
     <Card>

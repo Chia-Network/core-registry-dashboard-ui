@@ -20,18 +20,6 @@ const CarbonCreditByStatusChart: React.FC = () => {
     error: carbonCreditByStatusError,
   } = useGetTonsCo2Query({ unitStatus, vintageYear });
 
-  const labels = carbonCreditByStatusData?.data.map((item: any) => item.unitStatus) || [];
-  const datasetData = carbonCreditByStatusData?.data.map((item: any) => item.tonsCo2) || [];
-  const chartData = createChartDataWithSingleDataset(
-    labels,
-    datasetData,
-    capitalizeText(intl.formatMessage({ id: 'tons-co2' })),
-  );
-
-  const handleYearChange = (value: string | number) => {
-    setVintageYear(value as string);
-  };
-
   if (carbonCreditByStatusLoading) {
     return <SkeletonCard />;
   }
@@ -51,6 +39,18 @@ const CarbonCreditByStatusChart: React.FC = () => {
       </p>
     );
   }
+
+  const labels = carbonCreditByStatusData?.data?.map((item: any) => item?.unitStatus) || [];
+  const datasetData = carbonCreditByStatusData?.data?.map((item: any) => item?.tonsCo2) || [];
+  const chartData = createChartDataWithSingleDataset(
+    labels,
+    datasetData,
+    capitalizeText(intl.formatMessage({ id: 'tons-co2' })),
+  );
+
+  const handleYearChange = (value: string | number) => {
+    setVintageYear(value as string);
+  };
 
   return (
     <Card>

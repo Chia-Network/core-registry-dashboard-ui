@@ -17,9 +17,9 @@ ChartJS.register(ArcElement, Tooltip, Legend);
 
 const processCarbonDataByYearAndType = (data: TonsCo2[], unitStatus: string | undefined, unitType: string) => {
   const groupedData: Record<string, Record<string, number>> = {};
-  data.forEach((item) => {
-    const isUnitStatusMatch = item.unitStatus === unitStatus;
-    const isUnitTypeMatch = unitType === 'all' || item.unitType === unitType;
+  data?.forEach((item) => {
+    const isUnitStatusMatch = item?.unitStatus === unitStatus;
+    const isUnitTypeMatch = unitType === 'all' || item?.unitType === unitType;
     if ((!unitStatus || isUnitStatusMatch) && isUnitTypeMatch) {
       const { vintageYear, unitType, tonsCo2 } = item;
       if (vintageYear && !groupedData[vintageYear]) {
@@ -77,18 +77,20 @@ const IssuedCarbonYearlyChart: React.FC = () => {
   ];
 
   const lastTenYears = generateYearsRange(10)
-    .map((year) => year.label)
+    .map((year) => year?.label)
     .reverse();
-  const carbonData = processCarbonDataByYearAndType(carbonCreditByStatusData.data, unitStatus, unitType);
+
+  const carbonData = processCarbonDataByYearAndType(carbonCreditByStatusData?.data || [], unitStatus, unitType);
 
   const unitTypes = Array.from(
-    new Set(carbonCreditByStatusData.data.map((item) => item.unitType).filter((item) => Boolean(item))),
+    new Set(carbonCreditByStatusData?.data?.map((item) => item?.unitType).filter(Boolean)),
   ) as string[];
 
-  const datasets = unitTypes.map((type) => ({
-    label: type,
-    data: lastTenYears.map((year) => carbonData[year]?.[type] || 0),
-  }));
+  const datasets =
+    unitTypes?.map((type) => ({
+      label: type,
+      data: lastTenYears.map((year) => carbonData[year]?.[type] || 0),
+    })) || [];
 
   const chartData2 = createChartDataWithMultipleDatasets(lastTenYears, datasets);
 

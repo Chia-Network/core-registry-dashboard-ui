@@ -36,17 +36,20 @@ const IssuedCarbonByProjectTypeChart = () => {
     );
   }
 
-  const filteredData = issuedCarbonByProjectTypeData.data.issuedTonsCo2
-    .filter((item) => item.tonsCo2 > 0 && item.projectType)
-    .sort((a, b) => b.tonsCo2 - a.tonsCo2)
+  const issuedData = issuedCarbonByProjectTypeData?.data?.issuedTonsCo2 ?? [];
+
+  const filteredData = issuedData
+    .filter((item) => item?.tonsCo2 !== undefined && item?.tonsCo2 !== null && item?.tonsCo2 > 0 && item?.projectType)
+    .sort((a, b) => (b?.tonsCo2 || 0) - (a?.tonsCo2 || 0))
     .slice(0, 3);
 
-  const labels = filteredData?.map((item) => {
-    const label = item?.projectType || '';
-    return label?.length > 35 ? label.slice(0, 35) + '...' : label;
-  });
+  const labels =
+    filteredData?.map((item) => {
+      const label = item?.projectType || '';
+      return label?.length > 35 ? label.slice(0, 35) + '...' : label;
+    }) ?? [];
 
-  const chartDataArray = filteredData.map((item) => item.tonsCo2);
+  const chartDataArray = filteredData.map((item) => item?.tonsCo2 || 0);
 
   const chartData = createChartDataWithSingleDataset(
     labels,

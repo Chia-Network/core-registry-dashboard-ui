@@ -38,8 +38,10 @@ const AuthorizedProjectsCard: React.FC<AuthorizedProjectsCardProps> = ({ onGloss
     );
   }
 
-  const projectStatusData = projectsStatusCountData.data as ProjectsStatusCount[];
-  const statusCount = projectStatusData.find((s) => s.projectStatus === 'Authorized')?.count || 0;
+  const projectStatusData = projectsStatusCountData?.data
+    ? (projectsStatusCountData?.data as ProjectsStatusCount[])
+    : [];
+  const statusCount = projectStatusData.find((s) => s?.projectStatus === 'Authorized')?.count || 0;
 
   return (
     <Card>

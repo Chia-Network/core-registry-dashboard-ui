@@ -38,8 +38,10 @@ const RegisteredProjectsCard: React.FC<RegisteredProjectsCardProps> = ({ onGloss
     );
   }
 
-  const projectStatusData = projectsStatusCountData.data as ProjectsStatusCount[];
-  const statusCount = projectStatusData.find((s) => s.projectStatus === 'Registered')?.count || 0;
+  const projectStatusData = projectsStatusCountData?.data
+    ? (projectsStatusCountData?.data as ProjectsStatusCount[])
+    : [];
+  const statusCount = projectStatusData.find((s) => s?.projectStatus === 'Registered')?.count || 0;
 
   return (
     <Card>

@@ -39,9 +39,14 @@ const HomeOrgProjectsCountChart = () => {
     );
   }
 
-  const hostedCountData = homeOrgProjectsCountData.data as ProjectsHostedCount;
-  const selfHostedCount = hostedCountData.selfHostedProjectCount || 0;
-  const externallyHostedCount = hostedCountData.externallyHostedProjectCount || 0;
+  const hostedCountData = homeOrgProjectsCountData?.data
+    ? (homeOrgProjectsCountData?.data as ProjectsHostedCount)
+    : {
+        selfHostedProjectCount: 0,
+        externallyHostedProjectCount: 0,
+      };
+  const selfHostedCount = hostedCountData?.selfHostedProjectCount || 0;
+  const externallyHostedCount = hostedCountData?.externallyHostedProjectCount || 0;
 
   const chartData = createChartDataWithSingleDataset(
     [
