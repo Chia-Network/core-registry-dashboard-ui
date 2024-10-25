@@ -5,7 +5,7 @@ import { createChartDataWithSingleDataset, createNoDataPlugin, pieChartOptionsBa
 import { useGetProjectsCountQuery } from '@/api';
 import { FormattedMessage, IntlShape, useIntl } from 'react-intl';
 import { ProjectsHostedCount } from '@/schemas/ProjectsHostedCount.schema';
-import { capitalizeText } from '@/utils/text-utils';
+import { capitalizeText, convertKeyToLabel } from '@/utils/text-utils';
 
 Chart.register(ChartDataLabels);
 
@@ -45,15 +45,10 @@ const HomeOrgProjectsCountChart = () => {
         selfHostedProjectCount: 0,
         externallyHostedProjectCount: 0,
       };
-  const selfHostedCount = hostedCountData?.selfHostedProjectCount || 0;
-  const externallyHostedCount = hostedCountData?.externallyHostedProjectCount || 0;
 
   const chartData = createChartDataWithSingleDataset(
-    [
-      capitalizeText(intl.formatMessage({ id: 'externally-hosted-projects' })),
-      capitalizeText(intl.formatMessage({ id: 'self-hosted-projects' })),
-    ],
-    [externallyHostedCount, selfHostedCount],
+    Object.keys(hostedCountData)?.map((key) => convertKeyToLabel(key) || ''),
+    Object.values(hostedCountData)?.map((value) => value ?? 0),
     capitalizeText(intl.formatMessage({ id: 'count' })),
   );
 
