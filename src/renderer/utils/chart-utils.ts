@@ -1,8 +1,6 @@
 import { IntlShape } from 'react-intl';
 import { capitalizeText } from './text-utils';
-
-const BORDER_COLORS = ['rgba(75, 192, 192, 1)', 'rgba(0, 43, 73, 1)', 'rgba(0, 103, 160, 1)'];
-const BG_COLORS = ['rgba(75, 192, 192, 0.8)', 'rgba(0, 43, 73, 0.8)', 'rgba(0, 103, 160, 0.8)'];
+import { rgbToString, stringToBlueRGB } from './color-utils';
 
 export const barChartOptionsBase = {
   indexAxis: 'y',
@@ -115,18 +113,23 @@ export const pieChartOptionsBase = {
   },
 };
 
-export const createChartDataWithSingleDataset = (labels: string[], data: any[], datasetLabel: any) => ({
-  labels,
-  datasets: [
-    {
-      label: datasetLabel,
-      data,
-      backgroundColor: BG_COLORS,
-      borderColor: BORDER_COLORS,
-      borderWidth: 1,
-    },
-  ],
-});
+export const createChartDataWithSingleDataset = (labels: string[], data: any[], datasetLabel: any) => {
+  const backgroundColors = labels.map((label) => rgbToString(stringToBlueRGB(label)));
+  const borderColors = labels.map((label) => rgbToString(stringToBlueRGB(label)));
+
+  return {
+    labels,
+    datasets: [
+      {
+        label: datasetLabel,
+        data,
+        backgroundColor: backgroundColors,
+        borderColor: borderColors,
+        borderWidth: 1,
+      },
+    ],
+  };
+};
 
 export const createChartDataWithMultipleDatasets = (
   labels: string[],
@@ -134,13 +137,19 @@ export const createChartDataWithMultipleDatasets = (
 ) => {
   return {
     labels,
-    datasets: datasets.map((dataset, index) => ({
-      label: dataset.label,
-      data: dataset.data,
-      backgroundColor: BG_COLORS[index % BG_COLORS.length],
-      borderColor: BORDER_COLORS[index % BORDER_COLORS.length],
-      borderWidth: 1,
-    })),
+    datasets: datasets.map((dataset) => {
+      const baseColor = stringToBlueRGB(dataset.label);
+      const backgroundColor = `rgba(${baseColor[0]}, ${baseColor[1]}, ${baseColor[2]}, 0.9)`;
+      const borderColor = `rgba(${baseColor[0]}, ${baseColor[1]}, ${baseColor[2]}, 1)`;
+
+      return {
+        label: dataset.label,
+        data: dataset.data,
+        backgroundColor: backgroundColor,
+        borderColor: borderColor,
+        borderWidth: 1,
+      };
+    }),
   };
 };
 
@@ -150,7 +159,7 @@ export const createNoDataPlugin = (intl: IntlShape) => ({
     const datasets = chart.data.datasets;
     const ctx = chart.ctx;
 
-    const allDataEmpty = datasets.every((dataset) => {
+    const allDataEmpty = datasets.every((dataset: any) => {
       if (Array.isArray(dataset.backgroundColor)) {
         return dataset.data.every((value: number) => value === 0);
       }
