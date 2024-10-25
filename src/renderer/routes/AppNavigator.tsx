@@ -15,7 +15,6 @@ const AppNavigator: React.FC = () => {
           />
           <Route path="" element={<Template />}>
             <Route path="/" element={<Navigate to={ROUTES.DASHBOARD} />} />
-            <Route path={ROUTES.PROJECTS_LIST} element={<Pages.ListPageSample />} />
             <Route path={ROUTES.DASHBOARD} element={<Pages.Dashboard />} />
             <Route path="*" element={<Navigate replace to={ROUTES.DASHBOARD} />} />
           </Route>

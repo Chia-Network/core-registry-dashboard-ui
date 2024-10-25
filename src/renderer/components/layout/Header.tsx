@@ -14,6 +14,7 @@ const Header: React.FC = () => {
           {/* Right-aligned elements with explicit right margin on larger breakpoints */}
           <div className="flex items-center gap-5 text-white">
             <ConnectButton />
+            {/* <ThemeModeSelector /> */}
           </div>
         </div>
       </div>
