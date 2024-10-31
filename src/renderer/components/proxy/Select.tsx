@@ -128,7 +128,7 @@ const Select: React.FC<SelectProps> = ({
         id={id}
         name={name}
         value={inputValue?.toString()}
-        defaultValue={initialValue?.toString()}
+        // defaultValue={initialValue?.toString()}
         // @ts-ignore
         onChange={handleInputChange}
         disabled={disabled}
