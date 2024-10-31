@@ -52,7 +52,7 @@ const DataTable: React.FC<DataTableProps> = ({
   return (
     <div className="dark:bg-gray-800 h-full w-full">
       {/* Mobile view */}
-      <div className="block md:hidden mx-auto w-full custom-scrollbar">
+      <div className="block lg:hidden mx-auto w-full custom-scrollbar">
         {data?.length > 0 &&
           data.map((row) => (
             <div key={row[primaryKey]} className="mb-4 p-4 border border-gray-200 rounded dark:bg-gray-700">

@@ -10,7 +10,7 @@ interface AppLogoProps {
 const AppLogo: React.FC<AppLogoProps> = ({ width, height }) => {
   const intl: IntlShape = useIntl();
   return (
-    <div className="flex items-center w-full align-center md:max-w-md">
+    <div className="flex items-center w-full align-center lg:max-w-md">
       <div className="flex">
         <img src={logo} alt="logo" width={width} height={height} />
       </div>
