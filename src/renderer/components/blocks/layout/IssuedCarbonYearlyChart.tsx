@@ -40,7 +40,7 @@ const processCarbonDataByYearAndType = (data: TonsCo2[], unitStatus: string | un
 const IssuedCarbonYearlyChart: React.FC = () => {
   const [vintageYearRangeStart] = useQueryParamState('vintageYearRangeStart', `${new Date().getFullYear() - 9}`);
   const [vintageYearRangeEnd] = useQueryParamState('vintageYearRangeEnd', `${new Date().getFullYear()}`);
-  const [unitStatus, setUnitStatus] = useQueryParamState('issuedCarbonUnitStatus', undefined);
+  const [unitStatus, setUnitStatus] = useQueryParamState('issuedCarbonUnitStatus', 'Held');
   const [unitType] = useQueryParamState('unitType', 'all');
   const intl: IntlShape = useIntl();
 
