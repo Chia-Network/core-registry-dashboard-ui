@@ -53,20 +53,22 @@ const HomeOrgProjectsCountChart = () => {
   );
 
   return (
-    <Card className="items-center">
-      <PieChart
-        data={chartData}
-        options={{
-          ...pieChartOptionsBase,
-          plugins: {
-            ...pieChartOptionsBase.plugins,
-            title: {
-              display: false,
+    <Card>
+      <div className="flex justify-center max-h-[420px]">
+        <PieChart
+          data={chartData}
+          options={{
+            ...pieChartOptionsBase,
+            plugins: {
+              ...pieChartOptionsBase.plugins,
+              title: {
+                display: false,
+              },
             },
-          },
-        }}
-        plugins={[createNoDataPlugin(intl)]}
-      />
+          }}
+          plugins={[createNoDataPlugin(intl)]}
+        />
+      </div>
     </Card>
   );
 };

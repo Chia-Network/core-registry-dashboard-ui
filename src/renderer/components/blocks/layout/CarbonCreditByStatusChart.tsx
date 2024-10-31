@@ -58,7 +58,7 @@ const CarbonCreditByStatusChart: React.FC = () => {
         <Select name="year" options={generateYearsRange(10)} initialValue={vintageYear} onChange={handleYearChange} />
       </div>
       <PieChart
-        className="max-h-[450px]"
+        className="max-h-[420px]"
         data={chartData}
         options={{
           ...pieChartOptionsBase,
