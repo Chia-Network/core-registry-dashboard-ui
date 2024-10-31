@@ -10,8 +10,9 @@ import { capitalizeText } from '@/utils/text-utils';
 ChartJS.register(ArcElement, Tooltip, Legend);
 
 const CarbonCreditByStatusChart: React.FC = () => {
+  const currentYear = new Date().getFullYear();
   const [unitStatus] = useQueryParamState('carbonCreditUnitStatus', 'all');
-  const [vintageYear, setVintageYear] = useQueryParamState('vintageYear', undefined);
+  const [vintageYear, setVintageYear] = useQueryParamState('vintageYear', String(currentYear));
   const intl: IntlShape = useIntl();
 
   const {
