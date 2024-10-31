@@ -96,40 +96,42 @@ const IssuedCarbonYearlyChart: React.FC = () => {
 
   return (
     <Card>
-      <div className="grid justify-end">
-        <Select
-          name="status"
-          options={unitStatusOptions}
-          initialValue={unitStatus}
-          onChange={(value) => {
-            setUnitStatus(String(value));
-          }}
-        />
-      </div>
-      <BarChart
-        data={chartData2}
-        options={{
-          ...stackedBarChartOptionsBase,
-          scales: {
-            ...stackedBarChartOptionsBase.scales,
-            y: {
-              ...stackedBarChartOptionsBase.scales.y,
-              title: {
-                ...stackedBarChartOptionsBase.scales.y.title,
-                text: capitalizeText(intl.formatMessage({ id: 'tons-co2' })),
+      <div className="flex flex-col justify-between h-full">
+        <div className="grid justify-end">
+          <Select
+            name="status"
+            options={unitStatusOptions}
+            initialValue={unitStatus}
+            onChange={(value) => {
+              setUnitStatus(String(value));
+            }}
+          />
+        </div>
+        <BarChart
+          data={chartData2}
+          options={{
+            ...stackedBarChartOptionsBase,
+            scales: {
+              ...stackedBarChartOptionsBase.scales,
+              y: {
+                ...stackedBarChartOptionsBase.scales.y,
+                title: {
+                  ...stackedBarChartOptionsBase.scales.y.title,
+                  text: capitalizeText(intl.formatMessage({ id: 'tons-co2' })),
+                },
               },
             },
-          },
-          plugins: {
-            ...stackedBarChartOptionsBase.plugins,
-            title: {
-              ...stackedBarChartOptionsBase,
-              text: capitalizeText(intl.formatMessage({ id: 'issued-carbon-last-10-years' })),
+            plugins: {
+              ...stackedBarChartOptionsBase.plugins,
+              title: {
+                ...stackedBarChartOptionsBase,
+                text: capitalizeText(intl.formatMessage({ id: 'issued-carbon-last-10-years' })),
+              },
             },
-          },
-        }}
-        plugins={[createNoDataPlugin(intl)]}
-      />
+          }}
+          plugins={[createNoDataPlugin(intl)]}
+        />
+      </div>
     </Card>
   );
 };
