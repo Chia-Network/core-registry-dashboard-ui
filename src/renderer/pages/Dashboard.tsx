@@ -4,7 +4,7 @@ import { ProjectsTab, Tabs, UnitsTab } from '@/components';
 
 const Dashboard: React.FC = () => {
   return (
-    <>
+    <div className="h-full overflow-auto">
       <Tabs aria-label="Default tabs" className="pt-4">
         <Tabs.Item
           title={
@@ -27,7 +27,7 @@ const Dashboard: React.FC = () => {
           </div>
         </Tabs.Item>
       </Tabs>
-    </>
+    </div>
   );
 };
 

@@ -1,5 +1,5 @@
 import React from 'react';
-import { FormattedMessage } from 'react-intl';
+import { FormattedMessage, useIntl, IntlShape } from 'react-intl';
 import { useGetProjectsCountQuery } from '@/api';
 import { Card, SkeletonCard } from '@/components';
 import { ProjectsStatusCount } from '@/schemas/ProjectsStatusCount.schema';
@@ -16,6 +16,7 @@ const ApprovedProjectsCard: React.FC<ApprovedProjectsCardProps> = ({ onGlossaryC
   } = useGetProjectsCountQuery({
     status: true,
   });
+  const intl: IntlShape = useIntl();
 
   if (projectsStatusCountLoading) {
     return <SkeletonCard />;
@@ -37,8 +38,10 @@ const ApprovedProjectsCard: React.FC<ApprovedProjectsCardProps> = ({ onGlossaryC
     );
   }
 
-  const projectStatusData = projectsStatusCountData.data as ProjectsStatusCount[];
-  const statusCount = projectStatusData.find((s) => s.projectStatus === 'Approved')?.count || 0;
+  const projectStatusData = projectsStatusCountData?.data
+    ? (projectsStatusCountData?.data as ProjectsStatusCount[])
+    : [];
+  const statusCount = projectStatusData.find((s) => s?.projectStatus === 'Approved')?.count || 0;
 
   return (
     <Card>
@@ -50,7 +53,7 @@ const ApprovedProjectsCard: React.FC<ApprovedProjectsCardProps> = ({ onGlossaryC
             onClick={onGlossaryClick}
             className="text-left underline text-lime-500 dark:text-green-400"
           >
-            Projects Approved
+            {intl.formatMessage({ id: 'projects-approved' })}
           </a>
         </h4>
       </div>

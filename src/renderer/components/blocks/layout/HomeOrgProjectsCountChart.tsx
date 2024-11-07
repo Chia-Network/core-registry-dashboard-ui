@@ -1,10 +1,11 @@
 import { Card, PieChart, SkeletonCard } from '@/components';
 import ChartDataLabels from 'chartjs-plugin-datalabels';
 import { Chart } from 'chart.js';
-import { createChartDataWithSingleDataset, pieChartOptionsBase } from '@/utils/chart-utils';
+import { createChartDataWithSingleDataset, createNoDataPlugin, pieChartOptionsBase } from '@/utils/chart-utils';
 import { useGetProjectsCountQuery } from '@/api';
-import { FormattedMessage } from 'react-intl';
+import { FormattedMessage, IntlShape, useIntl } from 'react-intl';
 import { ProjectsHostedCount } from '@/schemas/ProjectsHostedCount.schema';
+import { capitalizeText, convertKeyToLabel } from '@/utils/text-utils';
 
 Chart.register(ChartDataLabels);
 
@@ -16,6 +17,7 @@ const HomeOrgProjectsCountChart = () => {
   } = useGetProjectsCountQuery({
     hostRegistry: true,
   });
+  const intl: IntlShape = useIntl();
 
   if (homeOrgProjectsCountLoading) {
     return <SkeletonCard />;
@@ -37,30 +39,36 @@ const HomeOrgProjectsCountChart = () => {
     );
   }
 
-  const hostedCountData = homeOrgProjectsCountData.data as ProjectsHostedCount;
-  const selfHostedCount = hostedCountData.selfHostedProjectCount || 0;
-  const externallyHostedCount = hostedCountData.externallyHostedProjectCount || 0;
+  const hostedCountData = homeOrgProjectsCountData?.data
+    ? (homeOrgProjectsCountData?.data as ProjectsHostedCount)
+    : {
+        selfHostedProjectCount: 0,
+        externallyHostedProjectCount: 0,
+      };
 
   const chartData = createChartDataWithSingleDataset(
-    ['Externally Hosted Projects', 'Self Hosted Projects'],
-    [externallyHostedCount, selfHostedCount],
-    'Count',
+    Object.keys(hostedCountData)?.map((key) => convertKeyToLabel(key) || ''),
+    Object.values(hostedCountData)?.map((value) => value ?? 0),
+    capitalizeText(intl.formatMessage({ id: 'count' })),
   );
 
   return (
-    <Card className="items-center">
-      <PieChart
-        data={chartData}
-        options={{
-          ...pieChartOptionsBase,
-          plugins: {
-            ...pieChartOptionsBase.plugins,
-            title: {
-              display: false,
+    <Card>
+      <div className="flex justify-center max-h-[420px]">
+        <PieChart
+          data={chartData}
+          options={{
+            ...pieChartOptionsBase,
+            plugins: {
+              ...pieChartOptionsBase.plugins,
+              title: {
+                display: false,
+              },
             },
-          },
-        }}
-      />
+          }}
+          plugins={[createNoDataPlugin(intl)]}
+        />
+      </div>
     </Card>
   );
 };

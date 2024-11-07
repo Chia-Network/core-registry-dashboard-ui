@@ -41,24 +41,15 @@ const GlossaryModal: React.FC<GlossaryModalProps> = ({ onClose, open }) => {
     [], // Removed dependencies on `setSearch` and `debounce` as they are not expected to change
   );
 
-  // if (glossaryLoading) {
-  //   return <SkeletonTable />;
-  // }
-
-  // if (glossaryError) {
-  //   return <FormattedMessage id={'unable-to-load-contents'} />;
-  // }
-
   return (
     <Modal show={open} onClose={onClose} size={'8xl'} position="top-center">
       <Modal.Header>
         <FormattedMessage id="glossary" />
       </Modal.Header>
       <Modal.Body>
-        <div className="flex flex-col md:flex-row gap-6 pl-1 my-2.5 relative z-30">
+        <div className="flex flex-col lg:flex-row gap-6 pl-1 my-2.5 relative z-30">
           <SearchBox defaultValue={search} onChange={handleSearchChange} />
         </div>
-        {/* <GlossaryTable data={filteredData || []} isLoading={glossaryLoading} order={order} setOrder={handleSetOrder} /> */}
         {glossaryLoading ? (
           <SkeletonTable />
         ) : glossaryError ? (

@@ -46,7 +46,7 @@ const GlossaryTable: React.FC<TableProps> = ({ data, isLoading, order, setOrder 
         order={order}
         onChangeOrder={setOrder}
         customGlossaryScroll
-        customGlossaryClass="hidden md:block"
+        customGlossaryClass="hidden lg:block"
       />
     </div>
   );

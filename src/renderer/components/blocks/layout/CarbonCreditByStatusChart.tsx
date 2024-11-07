@@ -10,8 +10,9 @@ import { capitalizeText } from '@/utils/text-utils';
 ChartJS.register(ArcElement, Tooltip, Legend);
 
 const CarbonCreditByStatusChart: React.FC = () => {
+  const currentYear = new Date().getFullYear();
   const [unitStatus] = useQueryParamState('carbonCreditUnitStatus', 'all');
-  const [vintageYear, setVintageYear] = useQueryParamState('vintageYear', undefined);
+  const [vintageYear, setVintageYear] = useQueryParamState('vintageYear', String(currentYear));
   const intl: IntlShape = useIntl();
 
   const {
@@ -19,14 +20,6 @@ const CarbonCreditByStatusChart: React.FC = () => {
     isLoading: carbonCreditByStatusLoading,
     error: carbonCreditByStatusError,
   } = useGetTonsCo2Query({ unitStatus, vintageYear });
-
-  const labels = carbonCreditByStatusData?.data.map((item: any) => item.unitStatus) || [];
-  const datasetData = carbonCreditByStatusData?.data.map((item: any) => item.tonsCo2) || [];
-  const chartData = createChartDataWithSingleDataset(labels, datasetData, 'TonsCo2');
-
-  const handleYearChange = (value: string | number) => {
-    setVintageYear(value as string);
-  };
 
   if (carbonCreditByStatusLoading) {
     return <SkeletonCard />;
@@ -48,13 +41,25 @@ const CarbonCreditByStatusChart: React.FC = () => {
     );
   }
 
+  const labels = carbonCreditByStatusData?.data?.map((item: any) => item?.unitStatus) || [];
+  const datasetData = carbonCreditByStatusData?.data?.map((item: any) => item?.tonsCo2) || [];
+  const chartData = createChartDataWithSingleDataset(
+    labels,
+    datasetData,
+    capitalizeText(intl.formatMessage({ id: 'tons-co2' })),
+  );
+
+  const handleYearChange = (value: string | number) => {
+    setVintageYear(value as string);
+  };
+
   return (
     <Card>
       <div className="grid justify-end">
         <Select name="year" options={generateYearsRange(10)} initialValue={vintageYear} onChange={handleYearChange} />
       </div>
       <PieChart
-        className="max-h-[450px]"
+        className="max-h-[420px]"
         data={chartData}
         options={{
           ...pieChartOptionsBase,

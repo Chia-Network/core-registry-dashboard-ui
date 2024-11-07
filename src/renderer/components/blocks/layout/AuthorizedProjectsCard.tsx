@@ -1,5 +1,5 @@
 import React from 'react';
-import { FormattedMessage } from 'react-intl';
+import { FormattedMessage, useIntl, IntlShape } from 'react-intl';
 import { useGetProjectsCountQuery } from '@/api';
 import { Card, SkeletonCard } from '@/components';
 import { ProjectsStatusCount } from '@/schemas/ProjectsStatusCount.schema';
@@ -16,6 +16,7 @@ const AuthorizedProjectsCard: React.FC<AuthorizedProjectsCardProps> = ({ onGloss
   } = useGetProjectsCountQuery({
     status: true,
   });
+  const intl: IntlShape = useIntl();
 
   if (projectsStatusCountLoading) {
     return <SkeletonCard />;
@@ -37,8 +38,10 @@ const AuthorizedProjectsCard: React.FC<AuthorizedProjectsCardProps> = ({ onGloss
     );
   }
 
-  const projectStatusData = projectsStatusCountData.data as ProjectsStatusCount[];
-  const statusCount = projectStatusData.find((s) => s.projectStatus === 'Authorized')?.count || 0;
+  const projectStatusData = projectsStatusCountData?.data
+    ? (projectsStatusCountData?.data as ProjectsStatusCount[])
+    : [];
+  const statusCount = projectStatusData.find((s) => s?.projectStatus === 'Authorized')?.count || 0;
 
   return (
     <Card>
@@ -46,7 +49,7 @@ const AuthorizedProjectsCard: React.FC<AuthorizedProjectsCardProps> = ({ onGloss
         <h3 className="text-7xl bold">{statusCount}</h3>
         <h4 className="text-lg font-semibold">
           <a href="#glossary" onClick={onGlossaryClick} className="text-left underline text-sky-400 dark:text-blue-500">
-            Projects Authorized
+            {intl.formatMessage({ id: 'projects-authorized' })}
           </a>
         </h4>
       </div>

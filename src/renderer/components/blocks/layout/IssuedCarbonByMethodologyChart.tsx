@@ -1,9 +1,10 @@
 import { BarChart, Card, SkeletonCard } from '@/components';
 import ChartDataLabels from 'chartjs-plugin-datalabels';
 import { Chart } from 'chart.js';
-import { barChartOptionsBase, createChartDataWithSingleDataset } from '@/utils/chart-utils';
+import { barChartOptionsBase, createChartDataWithSingleDataset, createNoDataPlugin } from '@/utils/chart-utils';
 import { useGetIssuedCarbonByMethodologyQuery } from '@/api';
-import { FormattedMessage } from 'react-intl';
+import { FormattedMessage, IntlShape, useIntl } from 'react-intl';
+import { capitalizeText } from '../../../utils/text-utils';
 
 Chart.register(ChartDataLabels);
 
@@ -13,6 +14,7 @@ const IssuedCarbonByMethodologyChart = () => {
     isLoading: issuedCarbonByMethodologyLoading,
     error: issuedCarbonByMethodologyError,
   } = useGetIssuedCarbonByMethodologyQuery({});
+  const intl: IntlShape = useIntl();
 
   if (issuedCarbonByMethodologyLoading) {
     return <SkeletonCard />;
@@ -34,19 +36,25 @@ const IssuedCarbonByMethodologyChart = () => {
     );
   }
 
-  const filteredData = issuedCarbonByMethodologyData.data.issuedTonsCo2
-    .filter((item) => item.tonsCo2 > 0 && item.methodology)
-    .sort((a, b) => b.tonsCo2 - a.tonsCo2)
+  const issuedData = issuedCarbonByMethodologyData?.data?.issuedTonsCo2 ?? [];
+  const filteredData = issuedData
+    .filter((item) => item?.tonsCo2 !== undefined && item?.tonsCo2 !== null && item?.tonsCo2 > 0 && item?.methodology)
+    .sort((a, b) => (b?.tonsCo2 || 0) - (a?.tonsCo2 || 0))
     .slice(0, 3);
 
-  const labels = filteredData?.map((item) => {
-    const label = item?.methodology || '';
-    return label?.length > 35 ? label.slice(0, 35) + '...' : label;
-  });
+  const labels =
+    filteredData?.map((item) => {
+      const label = item?.methodology || '';
+      return label.length > 35 ? label.slice(0, 35) + '...' : label;
+    }) ?? [];
 
-  const chartDataArray = filteredData.map((item) => item.tonsCo2);
+  const chartDataArray = filteredData.map((item) => item?.tonsCo2 || 0);
 
-  const chartData = createChartDataWithSingleDataset(labels, chartDataArray, 'tonsCo2');
+  const chartData = createChartDataWithSingleDataset(
+    labels,
+    chartDataArray,
+    capitalizeText(intl.formatMessage({ id: 'tons-co2' })),
+  );
 
   return (
     <Card>
@@ -58,10 +66,11 @@ const IssuedCarbonByMethodologyChart = () => {
             ...barChartOptionsBase.plugins,
             title: {
               ...barChartOptionsBase.plugins.title,
-              text: 'Issued Carbon by Methodology',
+              text: capitalizeText(intl.formatMessage({ id: 'issued-carbon-by-methodology' })),
             },
           },
         }}
+        plugins={[createNoDataPlugin(intl)]}
       />
     </Card>
   );

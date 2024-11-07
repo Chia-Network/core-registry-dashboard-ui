@@ -17,9 +17,9 @@ ChartJS.register(ArcElement, Tooltip, Legend);
 
 const processCarbonDataByYearAndType = (data: TonsCo2[], unitStatus: string | undefined, unitType: string) => {
   const groupedData: Record<string, Record<string, number>> = {};
-  data.forEach((item) => {
-    const isUnitStatusMatch = item.unitStatus === unitStatus;
-    const isUnitTypeMatch = unitType === 'all' || item.unitType === unitType;
+  data?.forEach((item) => {
+    const isUnitStatusMatch = item?.unitStatus === unitStatus;
+    const isUnitTypeMatch = unitType === 'all' || item?.unitType === unitType;
     if ((!unitStatus || isUnitStatusMatch) && isUnitTypeMatch) {
       const { vintageYear, unitType, tonsCo2 } = item;
       if (vintageYear && !groupedData[vintageYear]) {
@@ -40,7 +40,7 @@ const processCarbonDataByYearAndType = (data: TonsCo2[], unitStatus: string | un
 const IssuedCarbonYearlyChart: React.FC = () => {
   const [vintageYearRangeStart] = useQueryParamState('vintageYearRangeStart', `${new Date().getFullYear() - 9}`);
   const [vintageYearRangeEnd] = useQueryParamState('vintageYearRangeEnd', `${new Date().getFullYear()}`);
-  const [unitStatus, setUnitStatus] = useQueryParamState('issuedCarbonUnitStatus', undefined);
+  const [unitStatus, setUnitStatus] = useQueryParamState('issuedCarbonUnitStatus', 'Held');
   const [unitType] = useQueryParamState('unitType', 'all');
   const intl: IntlShape = useIntl();
 
@@ -77,47 +77,61 @@ const IssuedCarbonYearlyChart: React.FC = () => {
   ];
 
   const lastTenYears = generateYearsRange(10)
-    .map((year) => year.label)
+    .map((year) => year?.label)
     .reverse();
-  const carbonData = processCarbonDataByYearAndType(carbonCreditByStatusData.data, unitStatus, unitType);
+
+  const carbonData = processCarbonDataByYearAndType(carbonCreditByStatusData?.data || [], unitStatus, unitType);
 
   const unitTypes = Array.from(
-    new Set(carbonCreditByStatusData.data.map((item) => item.unitType).filter((item) => Boolean(item))),
+    new Set(carbonCreditByStatusData?.data?.map((item) => item?.unitType).filter(Boolean)),
   ) as string[];
 
-  const datasets = unitTypes.map((type) => ({
-    label: type,
-    data: lastTenYears.map((year) => carbonData[year]?.[type] || 0),
-  }));
+  const datasets =
+    unitTypes?.map((type) => ({
+      label: type,
+      data: lastTenYears.map((year) => carbonData[year]?.[type] || 0),
+    })) || [];
 
   const chartData2 = createChartDataWithMultipleDatasets(lastTenYears, datasets);
 
   return (
     <Card>
-      <div className="grid justify-end">
-        <Select
-          name="status"
-          options={unitStatusOptions}
-          initialValue={unitStatus}
-          onChange={(value) => {
-            setUnitStatus(String(value));
+      <div className="flex flex-col justify-between h-full">
+        <div className="grid justify-end">
+          <Select
+            name="status"
+            options={unitStatusOptions}
+            initialValue={unitStatus}
+            onChange={(value) => {
+              setUnitStatus(String(value));
+            }}
+          />
+        </div>
+        <BarChart
+          data={chartData2}
+          options={{
+            ...stackedBarChartOptionsBase,
+            scales: {
+              ...stackedBarChartOptionsBase.scales,
+              y: {
+                ...stackedBarChartOptionsBase.scales.y,
+                title: {
+                  ...stackedBarChartOptionsBase.scales.y.title,
+                  text: capitalizeText(intl.formatMessage({ id: 'tons-co2' })),
+                },
+              },
+            },
+            plugins: {
+              ...stackedBarChartOptionsBase.plugins,
+              title: {
+                ...stackedBarChartOptionsBase,
+                text: capitalizeText(intl.formatMessage({ id: 'issued-carbon-last-10-years' })),
+              },
+            },
           }}
+          plugins={[createNoDataPlugin(intl)]}
         />
       </div>
-      <BarChart
-        data={chartData2}
-        options={{
-          ...stackedBarChartOptionsBase,
-          plugins: {
-            ...stackedBarChartOptionsBase.plugins,
-            title: {
-              ...stackedBarChartOptionsBase,
-              text: capitalizeText(intl.formatMessage({ id: 'issued-carbon-last-10-years' })),
-            },
-          },
-        }}
-        plugins={[createNoDataPlugin(intl)]}
-      />
     </Card>
   );
 };
