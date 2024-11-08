@@ -89,7 +89,7 @@
     "*.+(js|ts|tsx)": "npm run lint:prettier-eslint"
   },
   "build": {
-    "appId": "org.worldbank.core-registry-dashboard",
+    "appId": "org.chia.core-registry-dashboard",
     "productName": "core-registry-dashboard",
     "files": [
       "build/renderer/**/*",
