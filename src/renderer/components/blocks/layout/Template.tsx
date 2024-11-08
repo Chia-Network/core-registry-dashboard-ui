@@ -1,8 +1,11 @@
 import { ErrorBoundary } from '@/pages';
 import { Outlet } from 'react-router-dom';
 import { Header } from '@/components';
+import { useManageSavedLocation } from '@/hooks/useManageSavedLocation';
 
 const Template = () => {
+  useManageSavedLocation();
+
   return (
     <ErrorBoundary>
       <div id="app" className="dark:bg-gray-800 w-full h-dvh">

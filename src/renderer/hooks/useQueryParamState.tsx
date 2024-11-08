@@ -26,6 +26,9 @@ const useQueryParamState: QueryParamState<string> = (name, defaultValue = '') =>
 
       window.history.pushState({}, '', decodeURIComponent(`${newPath}${window.location.hash}`));
       setParam(value);
+
+      // Trigger a popstate event so React Router updates the location
+      window.dispatchEvent(new PopStateEvent('popstate'));
     },
     [name, location],
   );
