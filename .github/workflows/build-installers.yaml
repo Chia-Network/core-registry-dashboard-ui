@@ -22,7 +22,7 @@ env:
 
 jobs:
   build_web:
-    name: Build CADT UI Web App
+    name: Build Core Registry Dashboard Web App
     runs-on: ubuntu-latest
     steps:
       - name: Checkout Code
