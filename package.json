@@ -1,12 +1,12 @@
 {
-  "name": "cadt-ui",
+  "name": "core-registry-dashboard",
   "private": true,
   "version": "0.0.10",
   "type": "module",
   "main": "build/main.js",
   "engineStrict": true,
   "author": "Chia Network Inc. <hello@chia.net>",
-  "description": "Climate Action Data Trust User Interface",
+  "description": "Core Registry Dashboard",
   "engines": {
     "node": ">=20.0"
   },
@@ -57,18 +57,18 @@
     "@types/react": "^18.2.79",
     "@types/react-dom": "^18.2.25",
     "@types/react-router-dom": "^5.3.3",
-    "@typescript-eslint/eslint-plugin": "^6.21.0",
-    "@typescript-eslint/parser": "^6.21.0",
+    "@typescript-eslint/eslint-plugin": "^8.13.0",
+    "@typescript-eslint/parser": "^8.13.0",
     "@vitejs/plugin-react-swc": "^3.6.0",
     "autoprefixer": "^10.4.19",
-    "concurrently": "^8.2.2",
+    "concurrently": "^9.1.0",
     "cross-env": "^7.0.3",
-    "electron": "^28.3.0",
+    "electron": "^33.2.0",
     "electron-builder": "^24.13.3",
-    "eslint": "^8.57.0",
-    "eslint-plugin-react-hooks": "^4.6.0",
-    "eslint-plugin-react-refresh": "^0.4.6",
-    "husky": "^9.0.11",
+    "eslint": "^9.14.0",
+    "eslint-plugin-react-hooks": "^5.0.0",
+    "eslint-plugin-react-refresh": "^0.4.14",
+    "husky": "^9.1.6",
     "lint-staged": "^15.2.2",
     "postcss": "^8.4.38",
     "prettier": "^3.2.5",
@@ -76,7 +76,7 @@
     "tailwindcss": "^3.4.3",
     "typescript": "^5.4.5",
     "vite": "^5.2.9",
-    "wait-on": "^7.2.0"
+    "wait-on": "^8.0.1"
   },
   "standard-version": {
     "skip": {
@@ -89,8 +89,8 @@
     "*.+(js|ts|tsx)": "npm run lint:prettier-eslint"
   },
   "build": {
-    "appId": "org.worldbank.climate-action-data-trust",
-    "productName": "cadt-ui",
+    "appId": "org.chia.core-registry-dashboard",
+    "productName": "core-registry-dashboard",
     "files": [
       "build/renderer/**/*",
       "build/**/*",
@@ -106,24 +106,18 @@
           "universal"
         ]
       },
-      "publish": null,
-      "icon": "src/assets/img/CADT_Icon.png"
+      "publish": null
     },
     "win": {
       "target": "nsis",
-      "publish": null,
-      "icon": "src/assets/img/CADT_Icon.png"
+      "publish": null
     },
     "linux": {
       "target": "deb",
-      "description": "Climate Action Data Trust User Interface",
+      "description": "Core Registry Dashboard",
       "maintainer": "Chia Network Inc. <hello@chia.net>",
-      "vendor": "https://climateactiondata.org/",
-      "publish": null,
-      "icon": "src/assets/img/CADT_Icon.png",
-      "desktop": {
-        "Icon": "/usr/share/icons/hicolor/0x0/apps/cadt-ui.png"
-      }
+      "vendor": "https://www.chia.net/",
+      "publish": null
     }
   }
 }
