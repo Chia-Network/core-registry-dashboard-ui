@@ -2,8 +2,11 @@ import { ErrorBoundary } from '@/pages';
 import { Outlet } from 'react-router-dom';
 import { Header } from '@/components';
 import { useManageSavedLocation } from '@/hooks/useManageSavedLocation';
+import { useSelector } from 'react-redux';
+import { RootState } from '@/store';
 
 const Template = () => {
+  const isCoreRegistryUiApp = useSelector((state: RootState) => state.app.isCoreRegistryUiApp);
   useManageSavedLocation();
 
   return (
@@ -13,7 +16,7 @@ const Template = () => {
         <div id="body" className="w-full h-full flex md:flex-row">
           <div id="content" className="w-full relative dark:text-white">
             <ErrorBoundary>
-              <div style={{ height: 'calc(100vh - 64px)' }}>
+              <div style={{ height: isCoreRegistryUiApp ? '100vh' : 'calc(100vh - 64px)' }}>
                 <Outlet />
               </div>
             </ErrorBoundary>
