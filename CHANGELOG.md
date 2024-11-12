@@ -1,4 +1,8 @@
-## 0.0.10 (2024-11-12)
+## [0.0.11](https://github.com/Chia-Network/core-registry-dashboard-ui/compare/0.0.10...0.0.11) (2024-11-12)
+
+
+
+## [0.0.10](https://github.com/Chia-Network/core-registry-dashboard-ui/compare/9f1c4cdde2b56a3e2162f21ee43c48468af1bcfd...0.0.10) (2024-11-12)
 
 
 ### Bug Fixes
