@@ -1,7 +1,7 @@
 {
   "name": "core-registry-dashboard",
   "private": true,
-  "version": "0.0.11",
+  "version": "1.0.0",
   "type": "module",
   "main": "build/main.js",
   "engineStrict": true,
@@ -106,18 +106,24 @@
           "universal"
         ]
       },
-      "publish": null
+      "publish": null,
+      "icon": "src/renderer/assets/img/dashboard-icon.png"
     },
     "win": {
       "target": "nsis",
-      "publish": null
+      "publish": null,
+      "icon": "src/renderer/assets/img/dashboard-icon.png"
     },
     "linux": {
       "target": "deb",
       "description": "Core Registry Dashboard",
       "maintainer": "Chia Network Inc. <hello@chia.net>",
       "vendor": "https://www.chia.net/",
-      "publish": null
+      "publish": null,
+      "icon": "src/renderer/assets/img/dashboard-icon.png",
+      "desktop": {
+        "Icon": "/usr/share/icons/hicolor/0x0/apps/dashboard-icon.png"
+      }
     }
   }
 }
