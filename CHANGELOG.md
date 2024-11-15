@@ -1,3 +1,7 @@
+## [1.0.1](https://github.com/Chia-Network/core-registry-dashboard-ui/compare/1.0.0...1.0.1) (2024-11-15)
+
+
+
 # [1.0.0](https://github.com/Chia-Network/core-registry-dashboard-ui/compare/0.0.11...1.0.0) (2024-11-15)
 
 
