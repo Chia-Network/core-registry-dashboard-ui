@@ -18,7 +18,7 @@ permissions:
   contents: write
 
 env:
-  APP_NAME: core-registry-dashboard
+  APP_NAME: core-registry-dashboard-ui
 
 jobs:
   build_web:
