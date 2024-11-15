@@ -19,52 +19,45 @@ and displays charts based on summary data statistics.
 
 ### Installation
 
-Precompiled x86 binaries and installers are available for MacOS, Windows, and Debian-based Linux distros (Ubuntu, Mint,
-PopOS, etc) on the [releases](https://github.com/Chia-Network/core-registry-dashboard-ui/releases) page.
+The dashboard is only available as a web build, though building it locally as an electron application should be possible (although not routinely tested).
 
-#### Using APT on Debian-based Linux Distros (Ubuntu, Mint, etc)
+### Web Application
 
+The Climate Dashboard can be hosted as a web application, either for internal use, or made available to the public.  When operating as a web application, the user's browser must be able to connect to the [Core Registry CADT API](https://github.com/Chia-Network/Core-Registry-CADT).  This means the API must be available on the public internet if the UI is public. 
 
-!!! TODO !!!
-The Core Registry Dashboard UI can be installed with `apt`.
+To host the UI on the web, use the [core-registry-dashboard-web-build.tar.gz file from the releases page](https://github.com/Chia-Network/core-registry-dashboard-ui/releases). One of the simplest solutions is to uncompress these files into a [public S3 bucket](https://docs.aws.amazon.com/AmazonS3/latest/userguide/WebsiteAccessPermissionsReqd.html). These files could also be served by any webserver, such as Nginx or Apache.  
 
-1. Start by updating apt and allowing repository download over HTTPS:
-
-```
-sudo apt-get update
-sudo apt-get install ca-certificates curl gnupg
-```
-
-2. Add Chia's official GPG Key (if you have installed Chia with `apt`, you'll have this key already and will get a
-   message about overwriting the existing key, which is safe to do):
+#### Sample Nginx Config
 
 ```
-curl -sL https://repo.chia.net/FD39E6D3.pubkey.asc | sudo gpg --dearmor -o /usr/share/keyrings/chia.gpg
+server {
+    listen 443 ssl http2;
+    listen [::]:443 ssl http2;
+
+    # Path on disk to Tokenization Engine UI files
+    root /var/www/dashboard-ui/build;
+
+    # Domain name where this site will be served from
+    server_name dashboard-ui-example-config.com;
+
+    # SSL certificates with full path
+    ssl_certificate /path/to/ssl/certificate/fullchain.pem;
+    ssl_certificate_key /path/to/ssl/certificate/privkey.pem;
+
+    # Optional, but recommended
+    resolver                  1.1.1.1;
+
+    try_files $uri /index.html;
+}
+
 ```
-
-3. Use the following command to setup the repository.
-
-```
-echo "deb [arch=$(dpkg --print-architecture) signed-by=/usr/share/keyrings/chia.gpg] https://repo.chia.net/climate-tokenization/debian/ stable main" | sudo tee /etc/apt/sources.list.d/climate-tokenization.list > /dev/null
-```
-
-4. Install the Climate Explorer UI
-
-```
-sudo apt-get update
-sudo apt-get install climate-explorer-ui
-```
-
-5. Run the Climate Explorer UI from your OS launcher or at the command line with `climate-explorer-ui`.
-^^^ TODO ^^^
-
 
 #### Installing from Source
 
 Install [Node 20](https://nodejs.org/en/download/releases) and then run the following:
 
 ```sh
-git clone git@github.com:Chia-Network/climate-explorer-ui
+git clone git@github.com:Chia-Network/core-registry-dashboard-ui.git
 cd core-registry-dashboard-ui
 npm install
 npm run start
