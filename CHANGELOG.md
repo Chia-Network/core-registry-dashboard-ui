@@ -1,3 +1,13 @@
+# [1.0.0](https://github.com/Chia-Network/core-registry-dashboard-ui/compare/0.0.11...1.0.0) (2024-11-15)
+
+
+### Features
+
+* proper dashboard icon ([918b608](https://github.com/Chia-Network/core-registry-dashboard-ui/commit/918b6085859d6c8aa6bb1e310b1aefe62e52692c))
+* update icon ([b388ceb](https://github.com/Chia-Network/core-registry-dashboard-ui/commit/b388cebbc4e7aff7ae1a932f1479b3395bbe02ed))
+
+
+
 ## [0.0.11](https://github.com/Chia-Network/core-registry-dashboard-ui/compare/0.0.10...0.0.11) (2024-11-12)
 
 
