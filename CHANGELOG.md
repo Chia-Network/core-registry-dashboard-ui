@@ -1,3 +1,12 @@
+## [1.0.2](https://github.com/Chia-Network/core-registry-dashboard-ui/compare/1.0.1...1.0.2) (2024-11-20)
+
+
+### Bug Fixes
+
+* over-cropped app icon ([0dd728d](https://github.com/Chia-Network/core-registry-dashboard-ui/commit/0dd728df2406e1281f9666ab0b0d8b0c500f446c))
+
+
+
 ## [1.0.1](https://github.com/Chia-Network/core-registry-dashboard-ui/compare/1.0.0...1.0.1) (2024-11-15)
 
 
