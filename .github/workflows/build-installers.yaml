@@ -18,7 +18,7 @@ permissions:
   contents: write
 
 env:
-  APP_NAME: core-registry-dashboard
+  APP_NAME: core-registry-dashboard-ui
 
 jobs:
   build_web:
@@ -70,7 +70,7 @@ jobs:
           echo "WEB_FILE=$WEB_FILE" >>$GITHUB_ENV
 
       - name: Release
-        uses: softprops/action-gh-release@v2.0.9
+        uses: softprops/action-gh-release@v2.1.0
         with:
           files: |
             ${{ env.WEB_FILE }}
