@@ -32,7 +32,6 @@
     "chart.js": "^4.4.4",
     "chartjs-plugin-datalabels": "^2.2.0",
     "dayjs": "^1.11.10",
-    "express": "^4.19.2",
     "flowbite": "^2.3.0",
     "flowbite-react": "^0.10.2",
     "formik": "^2.4.5",
