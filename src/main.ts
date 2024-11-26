@@ -20,7 +20,7 @@ function createWindow() {
   // Load URL based on the environment
   if (process.env.NODE_ENV === 'development') {
     console.log('loading app from dev node server');
-    win.loadURL('http://localhost:5173/'); // Development URL
+    win.loadURL('http://localhost:5176/'); // Development URL
   } else {
     // load app from packaged static html
     const indexPath = path.join(__dirname, 'renderer', 'index.html');
