@@ -1,3 +1,38 @@
+## [1.0.3](https://github.com/Chia-Network/core-registry-dashboard-ui/compare/1.0.3-rc3...1.0.3) (2024-12-18)
+
+
+
+## [1.0.2](https://github.com/Chia-Network/core-registry-dashboard-ui/compare/1.0.1...1.0.2) (2024-11-20)
+
+
+
+## [1.0.1](https://github.com/Chia-Network/core-registry-dashboard-ui/compare/1.0.0...1.0.1) (2024-11-15)
+
+
+
+# [1.0.0](https://github.com/Chia-Network/core-registry-dashboard-ui/compare/0.0.11...1.0.0) (2024-11-15)
+
+
+
+## [0.0.11](https://github.com/Chia-Network/core-registry-dashboard-ui/compare/0.0.10...0.0.11) (2024-11-12)
+
+
+
+## [0.0.10](https://github.com/Chia-Network/core-registry-dashboard-ui/compare/7cadd0c3e85617ecefeb3872008968195db9cfd8...0.0.10) (2024-11-12)
+
+
+### Bug Fixes
+
+* dev port number ([a6ab9b9](https://github.com/Chia-Network/core-registry-dashboard-ui/commit/a6ab9b9ad771545718d125462ef63c681bb5e24a))
+* locked in flowbite-react version ([168e10b](https://github.com/Chia-Network/core-registry-dashboard-ui/commit/168e10b96434e307717c164f498f5c8fb1156f2b))
+
+
+### Features
+
+* removed unnecessary production express server ([7cadd0c](https://github.com/Chia-Network/core-registry-dashboard-ui/commit/7cadd0c3e85617ecefeb3872008968195db9cfd8))
+
+
+
 ## [1.0.2](https://github.com/Chia-Network/core-registry-dashboard-ui/compare/1.0.1...1.0.2) (2024-11-20)
 
 
