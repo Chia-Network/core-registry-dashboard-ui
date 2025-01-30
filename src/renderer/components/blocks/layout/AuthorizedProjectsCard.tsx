@@ -48,7 +48,11 @@ const AuthorizedProjectsCard: React.FC<AuthorizedProjectsCardProps> = ({ onGloss
       <div className="flex flex-col gap-4 p-4 text-center">
         <h3 className="text-7xl bold">{statusCount}</h3>
         <h4 className="text-lg font-semibold">
-          <a href="#glossary" onClick={onGlossaryClick} className="text-left underline text-sky-400 dark:text-blue-500">
+          <a
+            href="#glossary"
+            onClick={onGlossaryClick}
+            className="text-left underline capitalize text-sky-400 dark:text-blue-500"
+          >
             {intl.formatMessage({ id: 'projects-authorized' })}
           </a>
         </h4>
