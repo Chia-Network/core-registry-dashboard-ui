@@ -12,6 +12,8 @@ import { TonsCo2 } from '@/schemas/TonsCo2.schema';
 import { generateYearsRange } from '@/utils/date-utils';
 import { IntlShape, useIntl } from 'react-intl';
 import { capitalizeText } from '@/utils/text-utils';
+import React from 'react';
+import { useGetPickListsQuery } from '@/api';
 
 ChartJS.register(ArcElement, Tooltip, Legend);
 
@@ -50,7 +52,9 @@ const IssuedCarbonYearlyChart: React.FC = () => {
     error: carbonCreditByStatusError,
   } = useGetTonsCo2Query({ unitType, vintageYearRangeStart, vintageYearRangeEnd, unitStatus });
 
-  if (carbonCreditByStatusLoading) {
+  const { data: pickListsData, isLoading: pickListsLoading } = useGetPickListsQuery();
+
+  if (carbonCreditByStatusLoading || pickListsLoading) {
     return <SkeletonCard />;
   }
 
@@ -82,9 +86,9 @@ const IssuedCarbonYearlyChart: React.FC = () => {
 
   const carbonData = processCarbonDataByYearAndType(carbonCreditByStatusData?.data || [], unitStatus, unitType);
 
-  const unitTypes = Array.from(
-    new Set(carbonCreditByStatusData?.data?.map((item) => item?.unitType).filter(Boolean)),
-  ) as string[];
+  const unitTypes =
+    pickListsData?.unitType ??
+    (Array.from(new Set(carbonCreditByStatusData?.data?.map((item) => item?.unitType).filter(Boolean))) as string[]);
 
   const datasets =
     unitTypes?.map((type) => ({

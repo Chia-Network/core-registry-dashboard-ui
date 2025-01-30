@@ -51,7 +51,7 @@ const ApprovedProjectsCard: React.FC<ApprovedProjectsCardProps> = ({ onGlossaryC
           <a
             href="#glossary"
             onClick={onGlossaryClick}
-            className="text-left underline text-lime-500 dark:text-green-400"
+            className="text-left underline capitalize text-lime-500 dark:text-green-400"
           >
             {intl.formatMessage({ id: 'projects-approved' })}
           </a>
