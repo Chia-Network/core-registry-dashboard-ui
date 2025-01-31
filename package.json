@@ -52,7 +52,7 @@
     "simplebar-react": "^3.2.6",
     "styled-components": "^6.1.13",
     "uuid": "^11.0.3",
-    "yup": "^1.4.0"
+    "yup": "^1.6.1"
   },
   "devDependencies": {
     "@commitlint/config-conventional": "^19.6.0",
