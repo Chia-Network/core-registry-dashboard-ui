@@ -36,9 +36,11 @@
   "retired": "retired",
   "cancelled": "cancelled",
   "held": "held",
-  "issued-carbon-last-10-years": "issued carbon last 10 years",
+  "issued-carbon-credits-last-10-years": "issued carbon credits last 10 years",
   "carbon-credits-by-status": "carbon credits by status",
   "no-data-available": "no data available",
   "cannot-connect-to-registry-api-with-current-settings": "Cannot connect to registry API with current settings",
-  "please-disconnect-to-edit-the-api-url-and-api-key": "Please disconnect to edit the API URL and API key"
+  "please-disconnect-to-edit-the-api-url-and-api-key": "Please disconnect to edit the API URL and API key",
+  "vintage": "Vintage",
+  "all": "All"
 }

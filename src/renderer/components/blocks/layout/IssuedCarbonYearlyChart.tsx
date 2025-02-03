@@ -17,11 +17,15 @@ import { useGetPickListsQuery } from '@/api';
 
 ChartJS.register(ArcElement, Tooltip, Legend);
 
-const processCarbonDataByYearAndType = (data: TonsCo2[], unitStatus: string | undefined, unitType: string) => {
+const processCarbonDataByYearAndType = (
+  data: TonsCo2[],
+  unitStatus: string | undefined,
+  unitType: string | undefined,
+) => {
   const groupedData: Record<string, Record<string, number>> = {};
   data?.forEach((item) => {
-    const isUnitStatusMatch = item?.unitStatus === unitStatus;
-    const isUnitTypeMatch = unitType === 'all' || item?.unitType === unitType;
+    const isUnitStatusMatch = unitStatus?.toLowerCase() === 'all' || item?.unitStatus === unitStatus;
+    const isUnitTypeMatch = unitType?.toLowerCase() === 'all' || item?.unitType === unitType;
     if ((!unitStatus || isUnitStatusMatch) && isUnitTypeMatch) {
       const { vintageYear, unitType, tonsCo2 } = item;
       if (vintageYear && !groupedData[vintageYear]) {
@@ -42,7 +46,7 @@ const processCarbonDataByYearAndType = (data: TonsCo2[], unitStatus: string | un
 const IssuedCarbonYearlyChart: React.FC = () => {
   const [vintageYearRangeStart] = useQueryParamState('vintageYearRangeStart', `${new Date().getFullYear() - 9}`);
   const [vintageYearRangeEnd] = useQueryParamState('vintageYearRangeEnd', `${new Date().getFullYear()}`);
-  const [unitStatus, setUnitStatus] = useQueryParamState('issuedCarbonUnitStatus', 'Held');
+  const [unitStatus, setUnitStatus] = useQueryParamState('issuedCarbonUnitStatus', 'All');
   const [unitType] = useQueryParamState('unitType', 'all');
   const intl: IntlShape = useIntl();
 
@@ -75,8 +79,9 @@ const IssuedCarbonYearlyChart: React.FC = () => {
   }
 
   const unitStatusOptions = [
-    { label: capitalizeText(intl.formatMessage({ id: 'retired' })), value: 'Retired' },
+    { label: capitalizeText(intl.formatMessage({ id: 'all' })), value: 'All' },
     { label: capitalizeText(intl.formatMessage({ id: 'held' })), value: 'Held' },
+    { label: capitalizeText(intl.formatMessage({ id: 'retired' })), value: 'Retired' },
     { label: capitalizeText(intl.formatMessage({ id: 'cancelled' })), value: 'Cancelled' },
   ];
 
@@ -129,7 +134,7 @@ const IssuedCarbonYearlyChart: React.FC = () => {
               ...stackedBarChartOptionsBase.plugins,
               title: {
                 ...stackedBarChartOptionsBase,
-                text: capitalizeText(intl.formatMessage({ id: 'issued-carbon-last-10-years' })),
+                text: capitalizeText(intl.formatMessage({ id: 'issued-carbon-credits-last-10-years' })),
               },
             },
           }}

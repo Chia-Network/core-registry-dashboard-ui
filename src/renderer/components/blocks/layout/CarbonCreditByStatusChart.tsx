@@ -6,6 +6,7 @@ import { Chart as ChartJS, ArcElement, Tooltip, Legend } from 'chart.js';
 import { createChartDataWithSingleDataset, createNoDataPlugin, pieChartOptionsBase } from '@/utils/chart-utils';
 import { generateYearsRange } from '@/utils/date-utils';
 import { capitalizeText } from '@/utils/text-utils';
+import { useMemo } from 'react';
 
 ChartJS.register(ArcElement, Tooltip, Legend);
 
@@ -20,6 +21,14 @@ const CarbonCreditByStatusChart: React.FC = () => {
     isLoading: carbonCreditByStatusLoading,
     error: carbonCreditByStatusError,
   } = useGetTonsCo2Query({ unitStatus, vintageYear });
+
+  const yearSelectorLabelsValues = useMemo(
+    () =>
+      generateYearsRange(10).map((selection) => {
+        return { label: `${intl.formatMessage({ id: 'vintage' })} ${selection.label}`, value: selection.value };
+      }),
+    [intl],
+  );
 
   if (carbonCreditByStatusLoading) {
     return <SkeletonCard />;
@@ -56,7 +65,7 @@ const CarbonCreditByStatusChart: React.FC = () => {
   return (
     <Card>
       <div className="grid justify-end">
-        <Select name="year" options={generateYearsRange(10)} initialValue={vintageYear} onChange={handleYearChange} />
+        <Select name="year" options={yearSelectorLabelsValues} initialValue={vintageYear} onChange={handleYearChange} />
       </div>
       <PieChart
         className="max-h-[420px]"
