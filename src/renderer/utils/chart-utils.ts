@@ -77,6 +77,12 @@ export const stackedBarChartOptionsBase = {
     legend: {
       display: true,
       position: 'left',
+      onHover: (event) => {
+        event.native.target.style.cursor = 'pointer'; // Change cursor on hover
+      },
+      onLeave: (event) => {
+        event.native.target.style.cursor = 'default'; // Revert cursor on leave
+      },
     },
     title: {
       display: true,
@@ -96,6 +102,12 @@ export const pieChartOptionsBase = {
   plugins: {
     legend: {
       display: true,
+      onHover: (event) => {
+        event.native.target.style.cursor = 'pointer'; // Change cursor on hover
+      },
+      onLeave: (event) => {
+        event.native.target.style.cursor = 'default'; // Revert cursor on leave
+      },
     },
     title: {
       display: true,
