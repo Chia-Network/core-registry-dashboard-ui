@@ -1,3 +1,51 @@
+## [1.0.4](https://github.com/Chia-Network/core-registry-dashboard-ui/compare/1.0.3-rc10...1.0.4) (2025-02-07)
+
+
+### Bug Fixes
+
+* projects page capitalization ([e12daa3](https://github.com/Chia-Network/core-registry-dashboard-ui/commit/e12daa3aaa55d0cd24ac4acbea0b998a87b6c7b6))
+* ts errors ([e083de8](https://github.com/Chia-Network/core-registry-dashboard-ui/commit/e083de85940af39a0bb1769a7209a02217e617be))
+
+
+### Features
+
+* all status option issues carbon chart ([7d0b475](https://github.com/Chia-Network/core-registry-dashboard-ui/commit/7d0b47557945a23990f47a5397e254f5755f79f8))
+
+
+
+## [1.0.3](https://github.com/Chia-Network/core-registry-dashboard-ui/compare/1.0.3-rc3...1.0.3) (2024-12-18)
+
+
+
+## [1.0.2](https://github.com/Chia-Network/core-registry-dashboard-ui/compare/1.0.1...1.0.2) (2024-11-20)
+
+
+
+## [1.0.1](https://github.com/Chia-Network/core-registry-dashboard-ui/compare/1.0.0...1.0.1) (2024-11-15)
+
+
+
+# [1.0.0](https://github.com/Chia-Network/core-registry-dashboard-ui/compare/0.0.11...1.0.0) (2024-11-15)
+
+
+
+## [0.0.11](https://github.com/Chia-Network/core-registry-dashboard-ui/compare/0.0.10...0.0.11) (2024-11-12)
+
+
+
+## 0.0.10 (2024-11-12)
+
+
+
+## [1.0.3-rc4](https://github.com/Chia-Network/core-registry-dashboard-ui/compare/1.0.3...1.0.3-rc4) (2025-01-09)
+
+
+### Bug Fixes
+
+* connect modal regex ([4f5fb8b](https://github.com/Chia-Network/core-registry-dashboard-ui/commit/4f5fb8bec1a2cb2826b9e5a1971bf5fa8eb37951))
+
+
+
 ## [1.0.3](https://github.com/Chia-Network/core-registry-dashboard-ui/compare/1.0.3-rc3...1.0.3) (2024-12-18)
 
 
