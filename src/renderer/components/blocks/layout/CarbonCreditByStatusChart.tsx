@@ -1,12 +1,13 @@
 import { useGetTonsCo2Query } from '@/api/cadt/v1/tonsCo2.api';
-import { PieChart, Card, SkeletonCard, Select } from '@/components';
+import { Card, SkeletonCard, Select, BarChart } from '@/components';
 import { useQueryParamState } from '@/hooks';
 import { FormattedMessage, IntlShape, useIntl } from 'react-intl';
 import { Chart as ChartJS, ArcElement, Tooltip, Legend } from 'chart.js';
-import { createChartDataWithSingleDataset, createNoDataPlugin, pieChartOptionsBase } from '@/utils/chart-utils';
+import { barChartOptionsBase, createChartDataWithMultipleDatasets, createNoDataPlugin } from '@/utils/chart-utils';
 import { generateYearsRange } from '@/utils/date-utils';
 import { capitalizeText } from '@/utils/text-utils';
 import { useMemo } from 'react';
+import { TonsCo2 } from '@/schemas/TonsCo2.schema';
 
 ChartJS.register(ArcElement, Tooltip, Legend);
 
@@ -50,12 +51,18 @@ const CarbonCreditByStatusChart: React.FC = () => {
     );
   }
 
-  const labels = carbonCreditByStatusData?.data?.map((item: any) => item?.unitStatus) || [];
-  const datasetData = carbonCreditByStatusData?.data?.map((item: any) => item?.tonsCo2) || [];
-  const chartData = createChartDataWithSingleDataset(
-    labels,
+  const datasetData =
+    carbonCreditByStatusData?.data
+      ?.map((item: TonsCo2) => {
+        return {
+          label: item?.unitStatus || '',
+          data: [item?.tonsCo2 || 0],
+        };
+      })
+      .filter((item) => item?.label) || [];
+  const chartData = createChartDataWithMultipleDatasets(
+    [capitalizeText(intl.formatMessage({ id: 'tons-co2' }))],
     datasetData,
-    capitalizeText(intl.formatMessage({ id: 'tons-co2' })),
   );
 
   const handleYearChange = (value: string | number) => {
@@ -64,24 +71,34 @@ const CarbonCreditByStatusChart: React.FC = () => {
 
   return (
     <Card>
-      <div className="grid justify-end">
-        <Select name="year" options={yearSelectorLabelsValues} initialValue={vintageYear} onChange={handleYearChange} />
+      <div className="flex flex-col justify-between h-full">
+        <div className="grid justify-end">
+          <Select
+            name="year"
+            options={yearSelectorLabelsValues}
+            initialValue={vintageYear}
+            onChange={handleYearChange}
+          />
+        </div>
+        <div className="flex flex-col justify-center h-full">
+          <BarChart
+            className="h-full"
+            data={chartData}
+            options={{
+              ...barChartOptionsBase,
+              plugins: {
+                ...barChartOptionsBase.plugins,
+                legend: { show: true },
+                title: {
+                  ...barChartOptionsBase.plugins.title,
+                  text: capitalizeText(intl.formatMessage({ id: 'carbon-credits-by-status' })),
+                },
+              },
+            }}
+            plugins={[createNoDataPlugin(intl)]}
+          />
+        </div>
       </div>
-      <PieChart
-        className="max-h-[420px]"
-        data={chartData}
-        options={{
-          ...pieChartOptionsBase,
-          plugins: {
-            ...pieChartOptionsBase.plugins,
-            title: {
-              ...pieChartOptionsBase.plugins.title,
-              text: capitalizeText(intl.formatMessage({ id: 'carbon-credits-by-status' })),
-            },
-          },
-        }}
-        plugins={[createNoDataPlugin(intl)]}
-      />
     </Card>
   );
 };

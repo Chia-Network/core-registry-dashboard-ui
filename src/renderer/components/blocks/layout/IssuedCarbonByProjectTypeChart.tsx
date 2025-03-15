@@ -67,7 +67,8 @@ const IssuedCarbonByProjectTypeChart = () => {
             ...barChartOptionsBase.plugins,
             title: {
               ...barChartOptionsBase.plugins.title,
-              text: capitalizeText(intl.formatMessage({ id: 'issued-carbon-by-project-type' })),
+              text:
+                capitalizeText(intl.formatMessage({ id: 'carbon-credits-issued-in-the-last-10-years' })) + ' (tC02e)',
             },
           },
         }}
