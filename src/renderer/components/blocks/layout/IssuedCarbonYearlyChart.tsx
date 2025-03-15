@@ -134,7 +134,7 @@ const IssuedCarbonYearlyChart: React.FC = () => {
               ...stackedBarChartOptionsBase.plugins,
               title: {
                 ...stackedBarChartOptionsBase,
-                text: capitalizeText(intl.formatMessage({ id: 'issued-carbon-credits-last-10-years' })),
+                text: capitalizeText(intl.formatMessage({ id: 'carbon-credits-issued-in-the-last-10-years' })),
               },
             },
           }}
