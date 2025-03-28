@@ -8,7 +8,7 @@ import { capitalizeText } from '../../../utils/text-utils';
 
 Chart.register(ChartDataLabels);
 
-const IssuedCarbonByMethodologyChart = () => {
+const CarbonCreditsIssuedByMethodologyChart = () => {
   const {
     data: issuedCarbonByMethodologyData,
     isLoading: issuedCarbonByMethodologyLoading,
@@ -66,7 +66,7 @@ const IssuedCarbonByMethodologyChart = () => {
             ...barChartOptionsBase.plugins,
             title: {
               ...barChartOptionsBase.plugins.title,
-              text: capitalizeText(intl.formatMessage({ id: 'issued-carbon-by-methodology' })),
+              text: capitalizeText(intl.formatMessage({ id: 'carbon-credits-issued-by-methodology' })) + ' (tC02e)',
             },
           },
         }}
@@ -76,4 +76,4 @@ const IssuedCarbonByMethodologyChart = () => {
   );
 };
 
-export { IssuedCarbonByMethodologyChart };
+export { CarbonCreditsIssuedByMethodologyChart };

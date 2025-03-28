@@ -26,8 +26,8 @@
   "projects-registered": "projects registered",
   "projects-authorized": "projects authorized",
   "projects-approved": "projects approved",
-  "issued-carbon-by-methodology": "issued carbon by methodology",
-  "issued-carbon-by-project-type": "issued carbon by project type",
+  "carbon-credits-issued-by-methodology": "carbon credits issued by methodology",
+  "carbon-credits-issued-by-project-type": "carbon credits issued by project type",
   "tons-co2": "tonsCo2",
   "count": "count",
   "externally-hosted-projects": "externally hosted projects",
@@ -36,11 +36,12 @@
   "retired": "retired",
   "cancelled": "cancelled",
   "held": "held",
-  "issued-carbon-credits-last-10-years": "issued carbon credits last 10 years",
+  "carbon-credits-issued-in-the-last-10-years": "carbon credits issued in the last 10 years",
   "carbon-credits-by-status": "carbon credits by status",
   "no-data-available": "no data available",
   "cannot-connect-to-registry-api-with-current-settings": "Cannot connect to registry API with current settings",
   "please-disconnect-to-edit-the-api-url-and-api-key": "Please disconnect to edit the API URL and API key",
   "vintage": "Vintage",
-  "all": "All"
+  "all": "All",
+  "total-projects": "total projects"
 }
