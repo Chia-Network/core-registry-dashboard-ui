@@ -50,7 +50,7 @@
     "redux-persist": "^6.0.0",
     "simplebar": "^6.3.0",
     "simplebar-react": "^3.3.0",
-    "styled-components": "^6.1.14",
+    "styled-components": "^6.1.16",
     "uuid": "^11.0.5",
     "yup": "^1.6.1"
   },
