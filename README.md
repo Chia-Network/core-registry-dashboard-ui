@@ -23,9 +23,9 @@ The dashboard is only available as a web build, though building it locally as an
 
 ### Web Application
 
-The Climate Dashboard can be hosted as a web application, either for internal use, or made available to the public.  When operating as a web application, the user's browser must be able to connect to the [Core Registry CADT API](https://github.com/Chia-Network/Core-Registry-CADT).  This means the API must be available on the public internet if the UI is public. 
+The Climate Dashboard can be hosted as a web application, either for internal use, or made available to the public.  When operating as a web application, the user's browser must be able to connect to the [Core Registry CADT API](https://github.com/Chia-Network/Core-Registry-CADT).  This means the API must be available on the public internet if the UI is public.
 
-To host the UI on the web, use the [core-registry-dashboard-web-build.tar.gz file from the releases page](https://github.com/Chia-Network/core-registry-dashboard-ui/releases). One of the simplest solutions is to uncompress these files into a [public S3 bucket](https://docs.aws.amazon.com/AmazonS3/latest/userguide/WebsiteAccessPermissionsReqd.html). These files could also be served by any webserver, such as Nginx or Apache.  
+To host the UI on the web, use the [core-registry-dashboard-web-build.tar.gz file from the releases page](https://github.com/Chia-Network/core-registry-dashboard-ui/releases). One of the simplest solutions is to uncompress these files into a [public S3 bucket](https://docs.aws.amazon.com/AmazonS3/latest/userguide/WebsiteAccessPermissionsReqd.html). These files could also be served by any webserver, such as Nginx or Apache.
 
 #### Sample Nginx Config
 
@@ -137,3 +137,8 @@ commits in a PR branch will be linted before it can be merged to master.
 
 All pull requests should be made against the `develop` branch. Commits to the `main` branch will trigger a release, so
 the `main` branch is always the code in the latest release.
+
+## Attribution
+
+* [Document Object Model](https://www.w3.org/TR/DOM-Requirements/) by [W3C](https://www.w3.org/) licensed under [CC BY 4.0](http://creativecommons.org/licenses/by/4.0/)
+* [caniuselite](https://github.com/browserslist/caniuse-lite) by [Browserlist](https://browsersl.ist/) licensed under [CC BY 4.0](http://creativecommons.org/licenses/by/4.0/)
