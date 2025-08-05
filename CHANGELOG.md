@@ -1,3 +1,15 @@
+## [1.0.6](https://github.com/Chia-Network/core-registry-dashboard-ui/compare/1.0.3-rc14...1.0.6) (2025-08-05)
+
+
+
+## [1.0.5](https://github.com/Chia-Network/core-registry-dashboard-ui/compare/1.0.3-rc12...1.0.5) (2025-03-28)
+
+
+
+## [1.0.4](https://github.com/Chia-Network/core-registry-dashboard-ui/compare/1.0.3-rc10...1.0.4) (2025-02-07)
+
+
+
 ## [1.0.5](https://github.com/Chia-Network/core-registry-dashboard-ui/compare/1.0.3-rc12...1.0.5) (2025-03-28)
 
 
