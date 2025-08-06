@@ -69,7 +69,7 @@ jobs:
       - build_web
     steps:
       - name: Download Web artifact
-        uses: actions/download-artifact@v4
+        uses: actions/download-artifact@v5
         with:
           name: ${{ env.APP_NAME }}-web-build
           path: ${{ env.APP_NAME }}-web-build
