@@ -1,14 +1,14 @@
 {
   "name": "core-registry-dashboard",
   "private": true,
-  "version": "1.0.6",
+  "version": "1.0.7",
   "type": "module",
   "main": "build/main.js",
   "engineStrict": true,
   "author": "Chia Network Inc. <hello@chia.net>",
   "description": "Core Registry Dashboard",
   "engines": {
-    "node": ">=20.0"
+    "node": ">=24.14.1"
   },
   "scripts": {
     "start": "vite",
